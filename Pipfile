@@ -1,0 +1,28 @@
+[[source]]
+name = "pypi"
+url = "https://pypi.org/simple"
+verify_ssl = true
+
+[dev-packages]
+pylint = "*"
+pytest = "*"
+twine = "*"
+
+[packages]
+# To convert yaml to dictonary
+pyyaml = "==5.1"
+# To convert dictonary to model
+dataclasses-json = "==0.2.7"
+
+[requires]
+python_version = "3.7"
+
+[pipenv]
+# dataclasses-json 0.2.7 depends on marshmallow 3.0.0rc6
+allow_prereleases = true
+
+[scripts]
+test = "cd tests && pytest"
+clear = "rm -rf yamldataclassconfig.egg-info/* build/* dist/*"
+build = "python setup.py sdist bdist_wheel"
+deploy = "twine upload --repository pypi dist/*"
