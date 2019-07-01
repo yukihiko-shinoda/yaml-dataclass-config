@@ -13,7 +13,7 @@ with open('README.md', 'r', encoding='utf8') as f:
 def main():
     setup(
         name='yamldataclassconfig',
-        version='0.0a1',
+        version='0.0a2',
         description='This project helps you to import config file writen by YAML to Python data class.',
         long_description=readme,
         long_description_content_type='text/markdown',

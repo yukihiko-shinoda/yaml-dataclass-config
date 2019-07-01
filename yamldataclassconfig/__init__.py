@@ -6,9 +6,9 @@ from pathlib import Path
 from typing import Union
 
 
-def build_file_path(path: Union[Path, str]):
+def build_file_path(path: Union[Path, str], path_is_absolute: bool = False):
     return field(
-        default=Path(os.getcwd()) / path,
+        default=(path if path_is_absolute else Path(os.getcwd()) / path),
         init=False,
         metadata={'dataclasses_json': {'mm_field': None}}
     )

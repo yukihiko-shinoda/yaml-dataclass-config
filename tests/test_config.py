@@ -1,3 +1,4 @@
+import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -59,6 +60,20 @@ class DataClassConfigFail(YamlDataClassConfig):
     )
 
 
+@dataclass
+class DataClassConfigSuccessSpecifyAbsoluteFilePath(YamlDataClassConfig):
+    FILE_PATH: Path = build_file_path(Path(os.getcwd()) / 'testconfigsuccessspecifyabsolutefilepath/config.yml', True)
+
+    part_config_a: PartConfigA = field(
+        default=None,
+        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
+    )
+    part_config_b: PartConfigB = field(
+        default=None,
+        metadata={'dataclasses_json': {'mm_field': PartConfigB}}
+    )
+
+
 class TestYamlDataClassConfig:
     def test_config_success(self):
         # noinspection PyPep8Naming
@@ -76,6 +91,14 @@ class TestYamlDataClassConfig:
         assert CONFIG.part_config_a.variable_b == '2'
         assert CONFIG.part_config_b.variable_c == datetime(2019, 6, 25, 13, 33, 30)
 
+    def test_config_success_specify_absolute_file_path(self):
+        # noinspection PyPep8Naming
+        CONFIG = DataClassConfigSuccessSpecifyAbsoluteFilePath()
+        CONFIG.load()
+        assert CONFIG.part_config_a.variable_a == 1
+        assert CONFIG.part_config_a.variable_b == '2'
+        assert CONFIG.part_config_b.variable_c == datetime(2019, 6, 25, 13, 33, 30)
+
     def test_config_fail(self):
         # noinspection PyPep8Naming
         CONFIG = DataClassConfigFail()
@@ -85,5 +108,4 @@ class TestYamlDataClassConfig:
         actual = ValidationError(
             {'part_config_b': ['Unknown field.']},
         )
-        print(error)
         assert validation_error.messages == actual.messages

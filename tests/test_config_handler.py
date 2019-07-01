@@ -12,13 +12,13 @@ class TestYamlDataClassConfigHandler:
     FILE_BACKUP: Path = PATH_TARGET / 'config.yml.bak'
     FILE_BACKUP_FOR_TEST: Path = PATH_TARGET / 'config.yml.test.bak'
 
-    def setup_method(self, method):
+    def setup_method(self):
         if self.FILE_TARGET.is_file():
             shutil.move(str(self.FILE_TARGET), str(self.FILE_BACKUP_FOR_TEST))
         if self.FILE_BACKUP.exists():
             os.unlink(str(self.FILE_BACKUP))
 
-    def teardown_method(self, method):
+    def teardown_method(self):
         if not self.FILE_BACKUP_FOR_TEST.is_file():
             return
         if self.FILE_TARGET.is_file():
