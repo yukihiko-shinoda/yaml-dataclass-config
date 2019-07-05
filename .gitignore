@@ -8,3 +8,4 @@ build
 dist
 yamldataclassconfig.egg-info
 __pycache__/
+/config.yml

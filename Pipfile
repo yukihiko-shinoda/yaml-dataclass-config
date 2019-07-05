@@ -7,6 +7,7 @@ verify_ssl = true
 pylint = "*"
 pytest = "*"
 twine = "*"
+unittest2 = "*"
 
 [packages]
 # To convert yaml to dictonary

@@ -1,5 +1,5 @@
 part_config_a:
-  variable_a: 1
-  variable_b: '2'
+  property_a: 1
+  property_b: '2'
 part_config_b:
-  variable_c: '2019-06-25 13:33:30'
+  property_c: '2019-06-25 13:33:30'
