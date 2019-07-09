@@ -4,10 +4,12 @@ import shutil
 from dataclasses import dataclass
 from pathlib import Path
 
-from yamldataclassconfig.config_handler import YamlDataClassConfigHandler, ConfigFilePathInterface,\
+from yamldataclassconfig.config_handler import YamlDataClassConfigHandler, ConfigFilePathInterface, \
     ConfigFilePathBuilder
 
-PATH_REFERENCE_DIRECTORY_EXAMPLE = Path(__file__).parent / 'testsetupcasetargetoverridepathcurrentdirectory'
+PATH_REFERENCE_DIRECTORY_EXAMPLE = Path(
+    __file__
+).parent / 'testresources' / 'testsetupcasetargetoverridepathcurrentdirectory'
 
 
 class PathOverWrittenYamlDataClassConfigHandler(YamlDataClassConfigHandler):
@@ -87,18 +89,15 @@ class TestYamlDataClassConfigHandler:
         """
         file_content_target_file = self._create_target_file()
         YamlDataClassConfigHandler.set_up()
-        with self.CONFIG_FILE_PATH.backup.open('r') as file_backup:
-            assert file_backup.read() == file_content_target_file
-        with self.CONFIG_FILE_PATH.target.open('r') as file_target:
-            assert file_target.read() == 'file content config.yml.dist'
+        assert self.CONFIG_FILE_PATH.backup.read_text() == file_content_target_file
+        assert self.CONFIG_FILE_PATH.target.read_text() == 'file content config.yml.dist'
 
     def test_set_up_case_target_file_does_not_exist(self):
         """
         Target file should replace with source file.
         """
         YamlDataClassConfigHandler.set_up()
-        with self.CONFIG_FILE_PATH.target.open('r') as file_target:
-            assert file_target.read() == 'file content config.yml.dist'
+        assert self.CONFIG_FILE_PATH.target.read_text() == 'file content config.yml.dist'
 
     def test_set_up_case_target_override_path_current_directory(self):
         """
@@ -107,12 +106,10 @@ class TestYamlDataClassConfigHandler:
         """
         file_content_target_file = self._create_target_file(self.OVERRIDE_CONFIG_FILE_PATH.target)
         PathOverWrittenYamlDataClassConfigHandler.set_up()
-        with self.OVERRIDE_CONFIG_FILE_PATH.backup.open('r') as file_backup:
-            assert file_backup.read() == file_content_target_file
-        with self.OVERRIDE_CONFIG_FILE_PATH.target.open('r') as file_target:
-            assert file_target.read() == (
-                'file content config.yml.dist in testsetupcasetargetoverridepathcurrentdirectory'
-            )
+        assert self.OVERRIDE_CONFIG_FILE_PATH.backup.read_text() == file_content_target_file
+        assert self.OVERRIDE_CONFIG_FILE_PATH.target.read_text() == (
+            'file content config.yml.dist in testsetupcasetargetoverridepathcurrentdirectory'
+        )
 
     def test_do_cleanups_case_backup_file_does_not_exist(self):
         """
@@ -120,8 +117,7 @@ class TestYamlDataClassConfigHandler:
         """
         file_content_target_file = self._create_target_file()
         YamlDataClassConfigHandler.do_cleanups()
-        with self.CONFIG_FILE_PATH.target.open('r') as file_target:
-            assert file_target.read() == file_content_target_file
+        assert self.CONFIG_FILE_PATH.target.read_text() == file_content_target_file
 
     def test_do_cleanups_case_backup_file_exists(self):
         """
@@ -131,22 +127,19 @@ class TestYamlDataClassConfigHandler:
         self._create_target_file()
         file_content_backup_file = self._create_backup_file()
         YamlDataClassConfigHandler.do_cleanups()
-        with self.CONFIG_FILE_PATH.target.open('r') as file_target:
-            assert file_target.read() == file_content_backup_file
+        assert self.CONFIG_FILE_PATH.target.read_text() == file_content_backup_file
         assert not self.CONFIG_FILE_PATH.backup.exists()
 
     def _create_target_file(self, file_target: Path = None):
         if file_target is None:
             file_target = self.CONFIG_FILE_PATH.target
-        return self._create_file('file content target file', file_target)
+        file_content = 'file content target file'
+        file_target.write_text(file_content)
+        return file_content
 
     def _create_backup_file(self, file_backup: Path = None):
         if file_backup is None:
             file_backup = self.CONFIG_FILE_PATH.backup
-        return self._create_file('file content backup file', file_backup)
-
-    @staticmethod
-    def _create_file(file_content, path_to_file):
-        with path_to_file.open('w') as file:
-            file.write(file_content)
+        file_content = 'file content backup file'
+        file_backup.write_text(file_content)
         return file_content

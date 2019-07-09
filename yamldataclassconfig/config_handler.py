@@ -6,25 +6,27 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Union, NoReturn
 
+from deprecated import deprecated
 
+
+@deprecated(reason="This module was extracted to independent package.")
 class ConfigFilePathInterface:
     """This interface defines properties which is used by YamlDataClassConfigHandler"""
     @property
     @abstractmethod
     def target(self) -> Path:
         """This property return path to target file"""
-
     @property
     @abstractmethod
     def source(self) -> Path:
         """This property return path to source file"""
-
     @property
     @abstractmethod
     def backup(self) -> Path:
         """This property return path to backup file"""
 
 
+@deprecated(reason="This module was extracted to independent package.")
 @dataclass
 class ConfigFilePathBuilder(ConfigFilePathInterface):
     """
@@ -54,6 +56,7 @@ class ConfigFilePathBuilder(ConfigFilePathInterface):
         return self.path_target_directory / self.path_test_directory
 
 
+@deprecated(reason="This module was extracted to independent package.")
 class YamlDataClassConfigHandler:
     """This class handles YAML config file."""
     CONFIG_FILE_PATH: ConfigFilePathInterface = ConfigFilePathBuilder()

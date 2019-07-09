@@ -4,16 +4,22 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+flake8 = "*"
 pylint = "*"
 pytest = "*"
+pytest-cov = "*"
+radon = "*"
 twine = "*"
 unittest2 = "*"
+fixturefilehandler = "*"
 
 [packages]
 # To convert yaml to dictonary
-pyyaml = "==5.1"
+pyyaml = "==5.1.1"
 # To convert dictonary to model
-dataclasses-json = "==0.2.7"
+dataclasses-json = "==0.2.12"
+# To notify deprecated
+Deprecated = "==1.2.6"
 
 [requires]
 python_version = "3.7"
@@ -24,6 +30,10 @@ allow_prereleases = true
 
 [scripts]
 test = "cd tests && pytest"
+coverage = "cd tests && pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing"
+flake8 = "flake8 --max-line-length=120 --statistics --show-source --radon-show-closures ."
+cc = "radon cc --show-complexity --min B ."
+mi = "radon mi --show ."
 clear = "rm -rf yamldataclassconfig.egg-info/* build/* dist/*"
 build = "python setup.py sdist bdist_wheel"
 deploy = "twine upload --repository pypi dist/*"

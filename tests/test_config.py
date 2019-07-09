@@ -55,7 +55,7 @@ class DataClassConfigSuccess(YamlDataClassConfig):
 @dataclass
 class DataClassConfigSuccessSpecifyFilePath(YamlDataClassConfig):
     """for test"""
-    FILE_PATH: Path = create_file_path_field('testconfigsuccessspecifyfilepath/config.yml')
+    FILE_PATH: Path = create_file_path_field('testresources/testconfigsuccessspecifyfilepath/config.yml')
 
     part_config_a: PartConfigA = field(
         default=None,
@@ -82,7 +82,7 @@ class DataClassConfigFail(YamlDataClassConfig):
 class DataClassConfigSuccessSpecifyAbsoluteFilePath(YamlDataClassConfig):
     """for test"""
     FILE_PATH: Path = create_file_path_field(
-        Path(os.getcwd()) / 'testconfigsuccessspecifyabsolutefilepath/config.yml',
+        Path(os.getcwd()) / 'testresources/testconfigsuccessspecifyabsolutefilepath/config.yml',
         True
     )
 

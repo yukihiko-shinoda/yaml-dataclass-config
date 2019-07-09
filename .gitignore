@@ -4,6 +4,7 @@
 .idea/**/pylint.xml
 .idea/sonarlint/*
 .pytest_cache
+.coverage
 build
 dist
 yamldataclassconfig.egg-info

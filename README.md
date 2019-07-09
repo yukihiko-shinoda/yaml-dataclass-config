@@ -134,33 +134,33 @@ class Config(YamlDataClassConfig):
 
 ### Use path to YAML config file as same as production when test?
 
-`YamlDataClassConfigHandler` can replace config.yml with tests/config.yml.dist easily.
-By default, `YamlDataClassConfigHandler` works with Python execution directory as target directory.
-To change this behavior,
-create `YamlDataClassConfigHandler` inherited class and override `CONFIG_FILE_PATH` constant.
+[fixturefilehandler](https://pypi.org/project/fixturefilehandler/)
+can replace config.yml with tests/config.yml.dist easily.
+Please call all `DeployerFactory.create` with `YamlConfigFilePathBuilder` instance argument
+to create ConfigDeployer.
+Then, set target directory which config.yml should be placed into `path_target_directory`. 
 
 Case when unittest:
 
 ```python
 from pathlib import Path
 import unittest2 as unittest
-
-from yamldataclassconfig.config_handler import YamlDataClassConfigHandler, ConfigFilePathBuilder
+from fixturefilehandler.factories import DeployerFactory
+from fixturefilehandler.file_paths import YamlConfigFilePathBuilder
 
 from yourproduct import CONFIG
 
 
-class ConfigHandler(YamlDataClassConfigHandler):
-    CONFIG_FILE_PATH = ConfigFilePathBuilder(path_target_directory=Path(__file__).parent.parent)
+ConfigDeployer = DeployerFactory.create(YamlConfigFilePathBuilder(path_target_directory=Path(__file__).parent.parent))
 
 
 class ConfigurableTestCase(unittest.TestCase):
     def setUp(self):
-        ConfigHandler.set_up()
+        ConfigDeployer.setup()
         CONFIG.load()
 
     def doCleanups(self):
-        ConfigHandler.do_cleanups()
+        ConfigDeployer.teardown()
 ```
 
 Case when pytest:
@@ -168,22 +168,21 @@ Case when pytest:
 ```python
 from pathlib import Path
 import pytest
-
-from yamldataclassconfig.config_handler import YamlDataClassConfigHandler, ConfigFilePathBuilder
+from fixturefilehandler.factories import DeployerFactory
+from fixturefilehandler.file_paths import YamlConfigFilePathBuilder
 
 from yourproduct import CONFIG
 
 
-class ConfigHandler(YamlDataClassConfigHandler):
-    CONFIG_FILE_PATH = ConfigFilePathBuilder(path_target_directory=Path(__file__).parent.parent)
+ConfigDeployer = DeployerFactory.create(YamlConfigFilePathBuilder(path_target_directory=Path(__file__).parent.parent))
 
 
 @pytest.fixture
 def yaml_config():
-    ConfigHandler.set_up()
+    ConfigDeployer.setup()
     CONFIG.load()
     yield
-    ConfigHandler.do_cleanups()
+    ConfigDeployer.teardown()
 
 
 def test_something(yaml_config):
