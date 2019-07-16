@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
+from typing import Optional
+
 from dataclasses_json import DataClassJsonMixin
 from marshmallow import fields
 from yamldataclassconfig.config import YamlDataClassConfig
@@ -16,9 +18,9 @@ class PartConfig(DataClassJsonMixin):
 
 @dataclass
 class Config(YamlDataClassConfig):
-    property_a: int = None
-    property_b: str = None
-    part_config: PartConfig = field(
+    property_a: Optional[int] = None
+    property_b: Optional[str] = None
+    part_config: Optional[PartConfig] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfig}}
     )

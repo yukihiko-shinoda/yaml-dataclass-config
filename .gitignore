@@ -3,6 +3,7 @@
 .idea/**/encodings.xml
 .idea/**/pylint.xml
 .idea/sonarlint/*
+.mypy_cache
 .pytest_cache
 .coverage
 build

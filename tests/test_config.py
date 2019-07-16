@@ -4,6 +4,7 @@ import os
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
+from typing import Optional
 
 import pytest
 from dataclasses_json import DataClassJsonMixin
@@ -44,9 +45,9 @@ class PartConfigB(DataClassJsonMixin):
 @dataclass
 class DataClassConfigSuccess(YamlDataClassConfig):
     """for test"""
-    property_a: int = None
-    property_b: str = None
-    part_config: PartConfig = field(
+    property_a: Optional[int] = None
+    property_b: Optional[str] = None
+    part_config: Optional[PartConfig] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfig}}
     )
@@ -57,11 +58,11 @@ class DataClassConfigSuccessSpecifyFilePath(YamlDataClassConfig):
     """for test"""
     FILE_PATH: Path = create_file_path_field('testresources/testconfigsuccessspecifyfilepath/config.yml')
 
-    part_config_a: PartConfigA = field(
+    part_config_a: Optional[PartConfigA] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfigA}}
     )
-    part_config_b: PartConfigB = field(
+    part_config_b: Optional[PartConfigB] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfigB}}
     )
@@ -70,9 +71,9 @@ class DataClassConfigSuccessSpecifyFilePath(YamlDataClassConfig):
 @dataclass
 class DataClassConfigFail(YamlDataClassConfig):
     """for test"""
-    property_a: int = None
-    property_b: str = None
-    part_config_a: PartConfigA = field(
+    property_a: Optional[int] = None
+    property_b: Optional[str] = None
+    part_config_a: Optional[PartConfigA] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfigA}}
     )
@@ -86,12 +87,12 @@ class DataClassConfigSuccessSpecifyAbsoluteFilePath(YamlDataClassConfig):
         True
     )
 
-    part_config_a: PartConfigA = field(
+    part_config_a: Optional[PartConfigA] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfigA}}
     )
-    property_c: int = None
-    property_d: str = None
+    property_c: Optional[int] = None
+    property_d: Optional[str] = None
 
 
 class TestYamlDataClassConfig:

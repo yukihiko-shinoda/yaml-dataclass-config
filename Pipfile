@@ -5,12 +5,12 @@ verify_ssl = true
 
 [dev-packages]
 flake8 = "*"
+mypy = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
 radon = "*"
 twine = "*"
-unittest2 = "*"
 fixturefilehandler = "*"
 
 [packages]

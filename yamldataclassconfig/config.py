@@ -21,6 +21,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         1. Access config as global
         2. Independent on config for development or use config for unit testing when unit testing
         """
+        # pylint: disable=no-member
         with self.FILE_PATH.open('r', encoding='UTF-8') as yml:
             dictionary_config = yaml.full_load(yml)
         self.__dict__.update(self.__class__.schema().load(dictionary_config).__dict__)
