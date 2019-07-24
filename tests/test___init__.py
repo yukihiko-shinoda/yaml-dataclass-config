@@ -5,7 +5,7 @@ from typing import Union
 
 import pytest
 
-from yamldataclassconfig import build_default_path
+from yamldataclassconfig import build_path
 
 
 class TestFunctions:
@@ -25,9 +25,9 @@ class TestFunctions:
         (Path('../config.yml'), Path(os.getcwd()) / '../config.yml'),
         (Path('../config_a.yml'), Path(os.getcwd()) / '../config_a.yml'),
     ])
-    def test_build_default_path_relative(argument: Union[Path, str], expected: Path):
+    def test_build_path_relative(argument: Union[Path, str], expected: Path):
         """Function should return Path object by argument as relative path."""
-        assert build_default_path(argument) == expected
+        assert build_path(argument) == expected
 
     @staticmethod
     @pytest.mark.parametrize('argument, expected', [
@@ -40,6 +40,6 @@ class TestFunctions:
         (Path(os.getcwd()) / '../config.yml', Path(os.getcwd()) / '../config.yml'),
         (Path(os.getcwd()) / '../config_a.yml', Path(os.getcwd()) / '../config_a.yml'),
     ])
-    def test_build_default_path_absolute(argument: Union[Path, str], expected: Path):
+    def test_build_path_absolute(argument: Union[Path, str], expected: Path):
         """Function should return Path object by argument as absolute path."""
-        assert build_default_path(argument, True) == expected
+        assert build_path(argument, True) == expected

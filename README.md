@@ -132,6 +132,41 @@ class Config(YamlDataClassConfig):
 ```
 
 
+### Switch target YAML config file to the one for unit testing?
+
+When setup on unit testing, you can call `Config.load()` with argument.
+
+Case when unittest:
+
+```python
+from pathlib import Path
+import unittest
+
+from yourproduct import CONFIG
+
+class ConfigurableTestCase(unittest.TestCase):
+    def setUp(self):
+        CONFIG.load(Path('path/to/yaml'))
+``` 
+
+Case when pytest:
+
+```python
+from pathlib import Path
+import pytest
+
+from yourproduct import CONFIG
+
+@pytest.fixture
+def yaml_config():
+    CONFIG.load(Path('path/to/yaml'))
+    yield
+
+def test_something(yaml_config):
+    """test something"""
+```
+
+
 ### Use path to YAML config file as same as production when test?
 
 [fixturefilehandler](https://pypi.org/project/fixturefilehandler/)

@@ -11,6 +11,8 @@ pytest = "*"
 pytest-cov = "*"
 radon = "*"
 twine = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/3865
+docutils = "==0.15"
 fixturefilehandler = "*"
 
 [packages]

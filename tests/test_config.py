@@ -54,9 +54,22 @@ class DataClassConfigSuccess(YamlDataClassConfig):
 
 
 @dataclass
-class DataClassConfigSuccessSpecifyFilePath(YamlDataClassConfig):
+class DataClassConfigA(YamlDataClassConfig):
     """for test"""
-    FILE_PATH: Path = create_file_path_field('testresources/testconfigsuccessspecifyfilepath/config.yml')
+    part_config_a: Optional[PartConfigA] = field(
+        default=None,
+        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
+    )
+    part_config_b: Optional[PartConfigB] = field(
+        default=None,
+        metadata={'dataclasses_json': {'mm_field': PartConfigB}}
+    )
+
+
+@dataclass
+class DataClassConfigSuccessSpecifyFilePath(DataClassConfigA):
+    """for test"""
+    FILE_PATH: Path = create_file_path_field('testresources/config_a.yml')
 
     part_config_a: Optional[PartConfigA] = field(
         default=None,
@@ -80,19 +93,23 @@ class DataClassConfigFail(YamlDataClassConfig):
 
 
 @dataclass
-class DataClassConfigSuccessSpecifyAbsoluteFilePath(YamlDataClassConfig):
+class DataClassConfigB(YamlDataClassConfig):
     """for test"""
-    FILE_PATH: Path = create_file_path_field(
-        Path(os.getcwd()) / 'testresources/testconfigsuccessspecifyabsolutefilepath/config.yml',
-        True
-    )
-
     part_config_a: Optional[PartConfigA] = field(
         default=None,
         metadata={'dataclasses_json': {'mm_field': PartConfigA}}
     )
     property_c: Optional[int] = None
     property_d: Optional[str] = None
+
+
+@dataclass
+class DataClassConfigSuccessSpecifyAbsoluteFilePath(DataClassConfigB):
+    """for test"""
+    FILE_PATH: Path = create_file_path_field(
+        Path(os.getcwd()) / 'testresources/config_b.yml',
+        True
+    )
 
 
 class TestYamlDataClassConfig:
@@ -122,22 +139,51 @@ class TestYamlDataClassConfig:
         # pylint: disable=no-member
         assert config.part_config.property_c == datetime(2019, 6, 25, 13, 33, 30)
 
-    @staticmethod
-    def test_config_success_specify_file_path():
+    @pytest.mark.parametrize('path_to_yaml', [
+        'testresources/config_a.yml',
+        Path('testresources/config_a.yml'),
+        ])
+    def test_config_success_specify_file_path_argument(self, path_to_yaml):
+        """Specified YAML file should be loaded."""
+        config = DataClassConfigA()
+        config.load('testresources/config_a.yml')
+        self.assert_that_config_a_is_loaded(config)
+
+    def test_config_success_specify_file_path_property(self):
         """Specified YAML file should be loaded."""
         config = DataClassConfigSuccessSpecifyFilePath()
         config.load()
-        # pylint: disable=no-member
-        assert config.part_config_a.property_a == 1
-        assert config.part_config_a.property_b == '2'
-        assert config.part_config_b.property_c == datetime(2019, 6, 25, 13, 33, 30)
+        self.assert_that_config_a_is_loaded(config)
 
     @staticmethod
-    def test_config_success_specify_absolute_file_path():
+    def assert_that_config_a_is_loaded(config: DataClassConfigA) -> None:
+        # pylint: disable=no-member
+        assert config.part_config_a is not None
+        assert config.part_config_a.property_a == 1
+        assert config.part_config_a.property_b == '2'
+        assert config.part_config_b is not None
+        assert config.part_config_b.property_c == datetime(2019, 6, 25, 13, 33, 30)
+
+    @pytest.mark.parametrize('path_to_yaml', [
+            f'{os.getcwd()}/testresources/config_b.yml',
+            Path(os.getcwd()) / 'testresources/config_b.yml',
+        ])
+    def test_config_success_specify_absolute_file_path_argument(self, path_to_yaml):
+        """Specified YAML file by absolute path should be loaded."""
+        config = DataClassConfigB()
+        config.load(path_to_yaml, True)
+        self.assert_that_config_b_is_loaded(config)
+
+    def test_config_success_specify_absolute_file_path_property(self):
         """Specified YAML file by absolute path should be loaded."""
         config = DataClassConfigSuccessSpecifyAbsoluteFilePath()
         config.load()
+        self.assert_that_config_b_is_loaded(config)
+
+    @staticmethod
+    def assert_that_config_b_is_loaded(config: DataClassConfigB) -> None:
         # pylint: disable=no-member
+        assert config.part_config_a is not None
         assert config.part_config_a.property_a == 1
         assert config.part_config_a.property_b == '2'
         assert config.property_c == 3
@@ -145,9 +191,7 @@ class TestYamlDataClassConfig:
 
     @staticmethod
     def test_config_fail():
-        """
-        ValidationError should be raised when YAML structure is different from config class structure.
-        """
+        """ValidationError should be raised when YAML structure is different from config class structure."""
         config = DataClassConfigFail()
         with pytest.raises(ValidationError) as error:
             config.load()

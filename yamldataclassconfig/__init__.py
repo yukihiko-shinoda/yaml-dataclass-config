@@ -12,13 +12,13 @@ def create_file_path_field(path: Union[Path, str], path_is_absolute: bool = Fals
     :param path_is_absolute: if True, use path as absolute
     :return: Path (dataclasses.Field) instance for FILE_PATH on YamlDataClassConfig class
     """
-    default_path = build_default_path(path, path_is_absolute)
+    default_path = build_path(path, path_is_absolute)
     # noinspection Mypy
     field_instance: Path = field(default=default_path, init=False, metadata={'dataclasses_json': {'mm_field': None}})
     return field_instance
 
 
-def build_default_path(path: Union[Path, str], path_is_absolute: bool = False) -> Path:
+def build_path(path: Union[Path, str], path_is_absolute: bool = False) -> Path:
     """
     This function build Path instance from arguments and returns it.
     :param path: path
