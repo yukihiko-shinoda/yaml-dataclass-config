@@ -17,11 +17,9 @@ fixturefilehandler = "*"
 
 [packages]
 # To convert yaml to dictonary
-pyyaml = "==5.1.1"
+pyyaml = "*"
 # To convert dictonary to model
-dataclasses-json = "==0.2.12"
-# To notify deprecated
-Deprecated = "==1.2.6"
+dataclasses-json = "*"
 
 [requires]
 python_version = "3.7"
