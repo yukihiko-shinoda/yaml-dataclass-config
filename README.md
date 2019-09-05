@@ -223,15 +223,3 @@ def yaml_config():
 def test_something(yaml_config):
     """test something"""
 ```
-
-## Known issue
-
-Dependency [dataclasses-json](https://pypi.org/project/dataclasses-json/)
-depends on [marshmallow](https://pypi.org/project/marshmallow/#history) pre release version.
-
-When you use Pipenv, use `--pre` option with command or add following lines into Pipfile:
-
-```
-[pipenv]
-allow_prereleases = true
-```

@@ -24,10 +24,6 @@ dataclasses-json = "*"
 [requires]
 python_version = "3.7"
 
-[pipenv]
-# dataclasses-json 0.2.7 depends on marshmallow 3.0.0rc6
-allow_prereleases = true
-
 [scripts]
 test = "cd tests && pytest"
 coverage = "cd tests && pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing"
