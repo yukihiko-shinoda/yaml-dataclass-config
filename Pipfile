@@ -22,8 +22,8 @@ pyyaml = "*"
 dataclasses-json = "*"
 
 [scripts]
-test = "cd tests && pytest"
-coverage = "cd tests && pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing"
+test = "pytest tests"
+coverage = "pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing tests"
 flake8 = "flake8 --max-line-length=120 --statistics --show-source --radon-show-closures ."
 cc = "radon cc --show-complexity --min B ."
 mi = "radon mi --show ."
