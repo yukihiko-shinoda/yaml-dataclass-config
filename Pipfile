@@ -14,6 +14,8 @@ radon = "*"
 docutils = "==0.15"
 fixturefilehandler = "*"
 pipenv-setup = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
+colorama = "*"
 
 [packages]
 # To convert yaml to dictonary
