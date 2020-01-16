@@ -24,6 +24,7 @@ def main():
             'dataclasses-json',
             'pyyaml',
         ],
+        dependency_links=[],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
         keywords="yaml dataclass dataclasses config",
     )

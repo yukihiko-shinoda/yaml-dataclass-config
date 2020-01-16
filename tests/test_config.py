@@ -1,6 +1,4 @@
 """Tests for YamlDataClassConfig."""
-import os
-
 from dataclasses import dataclass, field
 from datetime import datetime
 from pathlib import Path
@@ -107,7 +105,7 @@ class DataClassConfigB(YamlDataClassConfig):
 class DataClassConfigSuccessSpecifyAbsoluteFilePath(DataClassConfigB):
     """for test"""
     FILE_PATH: Path = create_file_path_field(
-        Path(os.getcwd()) / 'testresources/config_b.yml',
+        Path(__file__).parent / 'testresources/config_b.yml',
         True
     )
 
@@ -165,8 +163,8 @@ class TestYamlDataClassConfig:
         assert config.part_config_b.property_c == datetime(2019, 6, 25, 13, 33, 30)
 
     @pytest.mark.parametrize('path_to_yaml', [
-            f'{os.getcwd()}/testresources/config_b.yml',
-            Path(os.getcwd()) / 'testresources/config_b.yml',
+            f'{Path(__file__).parent}/testresources/config_b.yml',
+            Path(__file__).parent / 'testresources/config_b.yml',
         ])
     def test_config_success_specify_absolute_file_path_argument(self, path_to_yaml):
         """Specified YAML file by absolute path should be loaded."""
