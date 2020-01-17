@@ -26,6 +26,7 @@ dataclasses-json = "*"
 [scripts]
 test = "pytest tests"
 coverage = "pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing tests"
+coverage_xml = "pytest --cov=yamldataclassconfig --cov-report=xml tests"
 flake8 = "flake8 --max-line-length=120 --statistics --show-source --radon-show-closures ."
 cc = "radon cc --show-complexity --min B ."
 mi = "radon mi --show ."

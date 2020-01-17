@@ -1,9 +1,10 @@
 # YAML Data Class Config
 
-![pytest](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)
-![PyPI pyversions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)
-![Very popular](https://img.shields.io/pypi/dm/yamldataclassconfig)
-[![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
+[![Test](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ATest)
+[![codecov](https://codecov.io/gh/yukihiko-shinoda/yaml-dataclass-config/branch/master/graph/badge.svg)](https://codecov.io/gh/yukihiko-shinoda/yaml-dataclass-config)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![downloads](https://img.shields.io/pypi/dm/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
 
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).

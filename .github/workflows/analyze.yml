@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - master
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1.1.1
+        with:
+          python-version: '3.8'
+      - run: python -m pip install pipenv
+      - run: python -m pipenv sync --dev
+      - run: python -m pipenv run coverage_xml
+      - uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./tests/coverage.xml
+          fail_ci_if_error: true

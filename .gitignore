@@ -6,6 +6,7 @@
 .mypy_cache
 .pytest_cache
 .coverage
+coverage.xml
 build
 dist
 yamldataclassconfig.egg-info
