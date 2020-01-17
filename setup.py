@@ -12,7 +12,7 @@ def main():
 
     setup(
         name='yamldataclassconfig',
-        version='1.3.2',
+        version='1.3.3',
         description='This project helps you to import config file writen by YAML to Python data class.',
         long_description=readme,
         long_description_content_type='text/markdown',
