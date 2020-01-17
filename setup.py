@@ -20,6 +20,7 @@ def main():
         author_email='yuk.hik.future@gmail.com',
         packages=find_packages(exclude=("tests*", "myproduct*", "yourproduct*")),
         package_data={"yamldataclassconfig": ["py.typed"]},
+        python_requires='>=3.7',
         install_requires=[
             'dataclasses-json',
             'pyyaml',
@@ -27,6 +28,14 @@ def main():
         dependency_links=[],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
         keywords="yaml dataclass dataclasses config",
+        classifiers=[
+            "Development Status :: 5 - Production/Stable",
+            "Intended Audience :: Developers",
+            "License :: OSI Approved :: MIT License",
+            "Operating System :: OS Independent",
+            "Programming Language :: Python :: 3.7",
+            "Topic :: Software Development :: Quality Assurance",
+        ],
     )
 
 
