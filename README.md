@@ -1,5 +1,10 @@
 # YAML Data Class Config
 
+![pytest](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)
+![PyPI pyversions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)
+![Very popular](https://img.shields.io/pypi/dm/yamldataclassconfig)
+[![Twitter](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
+
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).
 
@@ -34,10 +39,11 @@ loading YAML file so you can replace YAML file for unit testing.
 
 ## Quickstart
 
-#### 1. Install
+### 1. Install
+
 `pip install yamldataclassconfig`
 
-#### 2. Prepare config YAML file.
+### 2. Prepare config YAML file
 
 Put `config.yml`
 YAML Data class Config loads `config.yml` on Python execution directory by default.
@@ -49,7 +55,7 @@ part_config:
   property_c: '2019-06-25 13:33:30'
 ```
 
-#### 3. Create config class
+### 3. Create config class
 
 Anywhere is OK, for example, I prefer to place on `myproduct/config.py`
 
@@ -107,9 +113,13 @@ if __name__ == '__main__':
     main()
 ```
 
+<!-- markdownlint-disable no-trailing-punctuation -->
 ## How do I...
+<!-- markdownlint-enable no-trailing-punctuation -->
 
+<!-- markdownlint-disable no-trailing-punctuation -->
 ### Fix path to yaml file independent on the Python execution directory?
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 override `FILE_PATH` property.
 
@@ -131,8 +141,9 @@ class Config(YamlDataClassConfig):
     FILE_PATH: Path = create_file_path_field(Path(__file__).parent.parent / 'config.yml')
 ```
 
-
+<!-- markdownlint-disable no-trailing-punctuation -->
 ### Switch target YAML config file to the one for unit testing?
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 When setup on unit testing, you can call `Config.load()` with argument.
 
@@ -147,7 +158,7 @@ from yourproduct import CONFIG
 class ConfigurableTestCase(unittest.TestCase):
     def setUp(self):
         CONFIG.load(Path('path/to/yaml'))
-``` 
+```
 
 Case when pytest:
 
@@ -166,14 +177,15 @@ def test_something(yaml_config):
     """test something"""
 ```
 
-
+<!-- markdownlint-disable no-trailing-punctuation -->
 ### Use path to YAML config file as same as production when test?
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 [fixturefilehandler](https://pypi.org/project/fixturefilehandler/)
 can replace config.yml with tests/config.yml.dist easily.
 Please call all `DeployerFactory.create` with `YamlConfigFilePathBuilder` instance argument
 to create ConfigDeployer.
-Then, set target directory which config.yml should be placed into `path_target_directory`. 
+Then, set target directory which config.yml should be placed into `path_target_directory`.
 
 Case when unittest:
 
