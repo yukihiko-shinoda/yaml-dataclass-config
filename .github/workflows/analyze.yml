@@ -7,14 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1.1.1
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
       - run: python -m pip install pipenv
       - run: python -m pipenv install --skip-lock --dev
-      - run: python -m pipenv run invoke coverage --xml
-      - uses: codecov/codecov-action@v1
+      - uses: paambaati/codeclimate-action@v2.6.0
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage.xml
-          fail_ci_if_error: true
+          coverageCommand: python -m pipenv run invoke coverage --xml

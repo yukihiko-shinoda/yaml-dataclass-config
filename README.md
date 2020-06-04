@@ -1,10 +1,12 @@
 # YAML Data Class Config
 
 [![Test](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ATest)
-[![codecov](https://codecov.io/gh/yukihiko-shinoda/yaml-dataclass-config/branch/master/graph/badge.svg)](https://codecov.io/gh/yukihiko-shinoda/yaml-dataclass-config)
-[![PyPI pyversions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
-[![downloads](https://img.shields.io/pypi/dm/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
-[![Tweet](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/test_coverage)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/maintainability)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/maintainability)
+[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/yukihiko-shinoda/yaml-dataclass-config)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![PyPI - Downloads](https://img.shields.io/pypi/dm/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![Twitter URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
 
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).
