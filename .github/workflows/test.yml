@@ -8,26 +8,27 @@ on:
       - master
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest]
         python-version: [ '3.8', '3.7' ]
       fail-fast: false
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1.1.1
+      - uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
       - run: python -m pip install pipenv
-      - run: python -m pipenv update --dev
+      - run: python -m pipenv install --python ${{ matrix.python-version }} --skip-lock --dev
       - run: python -m pipenv run test
   check_setup:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1.1.1
+      - uses: actions/setup-python@v2
         with:
           python-version: '3.8'
       - run: python -m pip install pipenv
-      - run: python -m pipenv sync --dev
+      - run: python -m pipenv install --skip-lock --dev
       - run: python -m pipenv run check_setup
