@@ -12,3 +12,4 @@ dist
 yamldataclassconfig.egg-info
 __pycache__/
 /config.yml
+Pipfile.lock
