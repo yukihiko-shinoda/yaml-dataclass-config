@@ -21,3 +21,8 @@ max-line-length = "120"
 disable = ''',
     bad-continuation,
     '''
+
+[tool.pylint.options]
+# Since this rule against single responsibility principle.
+# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+min-public-methods = "1"

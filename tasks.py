@@ -3,14 +3,13 @@ Tasks for maintaining the project.
 
 Execute 'invoke --list' for guidance on using Invoke
 """
-import shutil
 import platform
-from pathlib import Path
+import shutil
 import webbrowser
+from pathlib import Path
 
 from invoke import task  # type: ignore
 from invoke.runners import Failure, Result  # type: ignore
-
 
 ROOT_DIR = Path(__file__).parent
 SETUP_FILE = ROOT_DIR.joinpath("setup.py")
@@ -52,9 +51,7 @@ def style(context, check=False):
 def isort(context, check=False) -> Result:
     """Runs isort."""
     isort_options = "--recursive {}".format("--check-only --diff" if check else "")
-    return context.run(
-        "isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True
-    )
+    return context.run("isort {} {}".format(isort_options, " ".join(PYTHON_DIRS)), warn=True)
 
 
 def pipenv_setup(context, check=False) -> Result:
@@ -66,9 +63,7 @@ def pipenv_setup(context, check=False) -> Result:
 def black(context, check=False) -> Result:
     """Runs black."""
     black_options = "{}".format("--check --diff" if check else "")
-    return context.run(
-        "black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True
-    )
+    return context.run("black {} {}".format(black_options, " ".join(PYTHON_DIRS)), warn=True)
 
 
 @task
@@ -130,12 +125,7 @@ def xenon(context):
     """
     Check code complexity.
     """
-    context.run((
-                    "xenon"
-                    " --max-absolute A"
-                    "--max-modules A"
-                    "--max-average A"
-                    "{}").format(" ".join(PYTHON_DIRS)))
+    context.run(("xenon" " --max-absolute A" "--max-modules A" "--max-average A" "{}").format(" ".join(PYTHON_DIRS)))
 
 
 @task
@@ -147,10 +137,7 @@ def test(context):
     context.run("python {} test".format(SETUP_FILE), pty=pty)
 
 
-@task(help={
-    'publish': "Publish the result via coveralls",
-    'xml': "Export report as xml format",
-})
+@task(help={"publish": "Publish the result via coveralls", "xml": "Export report as xml format"})
 def coverage(context, publish=False, xml=False):
     """
     Create coverage report
