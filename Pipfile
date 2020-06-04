@@ -4,24 +4,24 @@ url = "https://pypi.org/simple"
 verify_ssl = true
 
 [dev-packages]
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
+colorama = "*"
+# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/3865
+docutils = "==0.15"
+fixturefilehandler = "*"
 flake8 = "*"
 mypy = "*"
+pipenv-setup = "*"
 pylint = "*"
 pytest = "*"
 pytest-cov = "*"
 radon = "*"
-# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/3865
-docutils = "==0.15"
-fixturefilehandler = "*"
-pipenv-setup = "*"
-# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
-colorama = "*"
 
 [packages]
-# To convert yaml to dictonary
-pyyaml = "*"
 # To convert dictonary to model
 dataclasses-json = "*"
+# To convert yaml to dictonary
+pyyaml = "*"
 
 [scripts]
 test = "pytest tests"
