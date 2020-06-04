@@ -1,0 +1,6 @@
+# Analyzes Pipfile Since PyUp.io seems to not support analyzing setup.py.
+# @see https://github.com/pyupio/pyup/issues/137
+# @see https://github.com/pyupio/pyup/issues/197
+requirements:
+    - Pipfile
+  
