@@ -7,13 +7,17 @@ from typing import Union
 import yaml
 from dataclasses_json import DataClassJsonMixin
 
-from yamldataclassconfig import create_file_path_field, build_path
+from yamldataclassconfig import build_path, create_file_path_field
 
 
 @dataclass
 class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     """This class implements YAML file load function."""
-    FILE_PATH: Path = create_file_path_field('config.yml')
+
+    # Reason: pylint bug.
+    # @see https://github.com/PyCQA/pylint/issues/2698
+    # pylint: disable=invalid-name
+    FILE_PATH: Path = create_file_path_field("config.yml")
 
     def load(self, path: Union[Path, str] = None, path_is_absolute: bool = False):
         """
@@ -26,6 +30,6 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
             path = self.FILE_PATH
         built_path = build_path(path, path_is_absolute)
         # pylint: disable=no-member
-        with built_path.open('r', encoding='UTF-8') as yml:
+        with built_path.open("r", encoding="UTF-8") as yml:
             dictionary_config = yaml.full_load(yml)
         self.__dict__.update(self.__class__.schema().load(dictionary_config).__dict__)

@@ -4,9 +4,9 @@ from datetime import datetime
 from pathlib import Path
 from typing import Optional
 
-import pytest
+import pytest  # type: ignore
 from dataclasses_json import DataClassJsonMixin
-from marshmallow import fields, ValidationError
+from marshmallow import ValidationError, fields
 
 from myproduct import my_project
 from yamldataclassconfig import create_file_path_field
@@ -16,16 +16,22 @@ from yamldataclassconfig.config import YamlDataClassConfig
 @dataclass
 class PartConfig(DataClassJsonMixin):
     """for test"""
-    property_c: datetime = field(metadata={'dataclasses_json': {
-        'encoder': datetime.isoformat,
-        'decoder': datetime.fromisoformat,
-        'mm_field': fields.DateTime(format='iso')
-    }})
+
+    property_c: datetime = field(
+        metadata={
+            "dataclasses_json": {
+                "encoder": datetime.isoformat,
+                "decoder": datetime.fromisoformat,
+                "mm_field": fields.DateTime(format="iso"),
+            }
+        }
+    )
 
 
 @dataclass
 class PartConfigA(DataClassJsonMixin):
     """for test"""
+
     property_a: int
     property_b: str
 
@@ -33,70 +39,59 @@ class PartConfigA(DataClassJsonMixin):
 @dataclass
 class PartConfigB(DataClassJsonMixin):
     """for test"""
-    property_c: datetime = field(metadata={'dataclasses_json': {
-        'encoder': datetime.isoformat,
-        'decoder': datetime.fromisoformat,
-        'mm_field': fields.DateTime(format='iso')
-    }})
+
+    property_c: datetime = field(
+        metadata={
+            "dataclasses_json": {
+                "encoder": datetime.isoformat,
+                "decoder": datetime.fromisoformat,
+                "mm_field": fields.DateTime(format="iso"),
+            }
+        }
+    )
 
 
 @dataclass
 class DataClassConfigSuccess(YamlDataClassConfig):
     """for test"""
+
     property_a: Optional[int] = None
     property_b: Optional[str] = None
-    part_config: Optional[PartConfig] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfig}}
-    )
+    part_config: Optional[PartConfig] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfig}})
 
 
 @dataclass
 class DataClassConfigA(YamlDataClassConfig):
     """for test"""
-    part_config_a: Optional[PartConfigA] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
-    )
-    part_config_b: Optional[PartConfigB] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigB}}
-    )
+
+    part_config_a: Optional[PartConfigA] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigA}})
+    part_config_b: Optional[PartConfigB] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigB}})
 
 
 @dataclass
 class DataClassConfigSuccessSpecifyFilePath(DataClassConfigA):
     """for test"""
-    FILE_PATH: Path = create_file_path_field('testresources/config_a.yml')
 
-    part_config_a: Optional[PartConfigA] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
-    )
-    part_config_b: Optional[PartConfigB] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigB}}
-    )
+    FILE_PATH: Path = create_file_path_field("testresources/config_a.yml")
+
+    part_config_a: Optional[PartConfigA] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigA}})
+    part_config_b: Optional[PartConfigB] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigB}})
 
 
 @dataclass
 class DataClassConfigFail(YamlDataClassConfig):
     """for test"""
+
     property_a: Optional[int] = None
     property_b: Optional[str] = None
-    part_config_a: Optional[PartConfigA] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
-    )
+    part_config_a: Optional[PartConfigA] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigA}})
 
 
 @dataclass
 class DataClassConfigB(YamlDataClassConfig):
     """for test"""
-    part_config_a: Optional[PartConfigA] = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfigA}}
-    )
+
+    part_config_a: Optional[PartConfigA] = field(default=None, metadata={"dataclasses_json": {"mm_field": PartConfigA}})
     property_c: Optional[int] = None
     property_d: Optional[str] = None
 
@@ -104,23 +99,25 @@ class DataClassConfigB(YamlDataClassConfig):
 @dataclass
 class DataClassConfigSuccessSpecifyAbsoluteFilePath(DataClassConfigB):
     """for test"""
-    FILE_PATH: Path = create_file_path_field(
-        Path(__file__).parent / 'testresources/config_b.yml',
-        True
-    )
+
+    FILE_PATH: Path = create_file_path_field(Path(__file__).parent / "testresources/config_b.yml", True)
 
 
 class TestYamlDataClassConfig:
     """Tests for YamlDataClassConfig."""
+
     @staticmethod
     def test_scenario_readme(capsys):
         """Values on YAML file should be printed."""
         my_project.main()
         captured = capsys.readouterr()
-        assert captured.out == '''1
+        assert (
+            captured.out
+            == """1
 2
 2019-06-25 13:33:30
-'''
+"""
+        )
 
     @staticmethod
     def test_config_success():
@@ -133,18 +130,16 @@ class TestYamlDataClassConfig:
         config = DataClassConfigSuccess()
         config.load()
         assert config.property_a == 1
-        assert config.property_b == '2'
+        assert config.property_b == "2"
         # pylint: disable=no-member
         assert config.part_config.property_c == datetime(2019, 6, 25, 13, 33, 30)
 
-    @pytest.mark.parametrize('path_to_yaml', [
-        'testresources/config_a.yml',
-        Path('testresources/config_a.yml'),
-        ])
+    # pylint: disable=unused-argument
+    @pytest.mark.parametrize("path_to_yaml", ["testresources/config_a.yml", Path("testresources/config_a.yml")])
     def test_config_success_specify_file_path_argument(self, path_to_yaml):
         """Specified YAML file should be loaded."""
         config = DataClassConfigA()
-        config.load('testresources/config_a.yml')
+        config.load("testresources/config_a.yml")
         self.assert_that_config_a_is_loaded(config)
 
     def test_config_success_specify_file_path_property(self):
@@ -156,16 +151,14 @@ class TestYamlDataClassConfig:
     @staticmethod
     def assert_that_config_a_is_loaded(config: DataClassConfigA) -> None:
         # pylint: disable=no-member
-        assert config.part_config_a is not None
-        assert config.part_config_a.property_a == 1
-        assert config.part_config_a.property_b == '2'
+        TestYamlDataClassConfig.check_part_config_a(config)
         assert config.part_config_b is not None
         assert config.part_config_b.property_c == datetime(2019, 6, 25, 13, 33, 30)
 
-    @pytest.mark.parametrize('path_to_yaml', [
-            f'{Path(__file__).parent}/testresources/config_b.yml',
-            Path(__file__).parent / 'testresources/config_b.yml',
-        ])
+    @pytest.mark.parametrize(
+        "path_to_yaml",
+        [f"{Path(__file__).parent}/testresources/config_b.yml", Path(__file__).parent / "testresources/config_b.yml"],
+    )
     def test_config_success_specify_absolute_file_path_argument(self, path_to_yaml):
         """Specified YAML file by absolute path should be loaded."""
         config = DataClassConfigB()
@@ -181,11 +174,15 @@ class TestYamlDataClassConfig:
     @staticmethod
     def assert_that_config_b_is_loaded(config: DataClassConfigB) -> None:
         # pylint: disable=no-member
+        TestYamlDataClassConfig.check_part_config_a(config)
+        assert config.property_c == 3
+        assert config.property_d == "4"
+
+    @staticmethod
+    def check_part_config_a(config):
         assert config.part_config_a is not None
         assert config.part_config_a.property_a == 1
-        assert config.part_config_a.property_b == '2'
-        assert config.property_c == 3
-        assert config.property_d == '4'
+        assert config.part_config_a.property_b == "2"
 
     @staticmethod
     def test_config_fail():
@@ -194,7 +191,5 @@ class TestYamlDataClassConfig:
         with pytest.raises(ValidationError) as error:
             config.load()
         validation_error: ValidationError = error.value
-        actual = ValidationError(
-            {'part_config': ['Unknown field.']},
-        )
+        actual = ValidationError({"part_config": ["Unknown field."]},)
         assert validation_error.messages == actual.messages

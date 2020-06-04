@@ -1,0 +1,28 @@
+[tool.isort]
+# @see https://github.com/timothycrosley/isort/issues/694#issuecomment-581246882
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 120
+
+# @see https://black.readthedocs.io/en/stable/pyproject_toml.html#configuration-format
+[tool.black]
+line-length = 120
+
+[tool.pylint.basic]
+docstring-min-length = "7"
+
+[tool.pylint.format]
+max-line-length = "120"
+
+[tool.pylint.messages_control]
+# bad-continuation: @see https://github.com/PyCQA/pylint/pull/3571
+disable = ''',
+    bad-continuation,
+    '''
+
+[tool.pylint.options]
+# Since this rule against single responsibility principle.
+# @see https://stackoverflow.com/questions/28722314/why-does-pylint-want-2-public-methods-per-class/40258006#40258006
+min-public-methods = "1"

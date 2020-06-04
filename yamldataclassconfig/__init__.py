@@ -14,7 +14,7 @@ def create_file_path_field(path: Union[Path, str], path_is_absolute: bool = Fals
     """
     default_path = build_path(path, path_is_absolute)
     # noinspection Mypy
-    field_instance: Path = field(default=default_path, init=False, metadata={'dataclasses_json': {'mm_field': Path}})
+    field_instance: Path = field(default=default_path, init=False, metadata={"dataclasses_json": {"mm_field": Path}})
     return field_instance
 
 
