@@ -26,6 +26,7 @@ def main():
             'pyyaml',
         ],
         dependency_links=[],
+        setup_requires=['pytest-runner'],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
         keywords="yaml dataclass dataclasses config",
         classifiers=[
