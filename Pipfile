@@ -6,31 +6,24 @@ verify_ssl = true
 [dev-packages]
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
+coverage = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/3865
 docutils = "==0.15"
 fixturefilehandler = "*"
 flake8 = "*"
+invoke = "*"
+isort = "*"
 mypy = "*"
 pipenv-setup = "*"
 pylint = "*"
 pytest = "*"
-pytest-cov = "*"
 radon = "*"
+wheel = "*"
+xenon = "*"
+yamldataclassconfig = {editable = true, path = "."}
 
 [packages]
 # To convert dictonary to model
 dataclasses-json = "*"
 # To convert yaml to dictonary
 pyyaml = "*"
-
-[scripts]
-test = "pytest tests"
-coverage = "pytest --verbose --cov=yamldataclassconfig --cov-report=term-missing tests"
-coverage_xml = "pytest --cov=yamldataclassconfig --cov-report=xml tests"
-flake8 = "flake8 --max-line-length=120 --statistics --show-source --radon-show-closures ."
-cc = "radon cc --show-complexity --min B ."
-mi = "radon mi --show ."
-setup_sync = "pipenv-setup sync --pipfile"
-check_setup = "pipenv-setup check --strict"
-clear = "rm -rf yamldataclassconfig.egg-info/* build/* dist/*"
-build = "python setup.py sdist bdist_wheel"
