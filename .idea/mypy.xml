@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project version="4">
-  <component name="MypyConfigService">
-    <option name="customMypyPath" value="C:\Users\master\.virtualenvs\yaml-dataclass-config-titLDcYj\Scripts\mypy.exe" />
-    <option name="mypyConfigFilePath" value="C:\Users\master\.config\mypy\config\mypy.ini" />
-  </component>
-</project>
