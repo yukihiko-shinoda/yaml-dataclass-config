@@ -45,7 +45,9 @@ loading YAML file so you can replace YAML file for unit testing.
 
 ### 1. Install
 
-`pip install yamldataclassconfig`
+```console
+pip install yamldataclassconfig
+```
 
 ### 2. Prepare config YAML file
 
