@@ -8,8 +8,6 @@ bump2version = "*"
 # Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/4101
 colorama = "*"
 coverage = "*"
-# Hotfix for Pipenv's Bug @see https://github.com/pypa/pipenv/issues/3865
-docutils = "==0.15"
 fixturefilehandler = "*"
 flake8 = "*"
 invoke = "*"
