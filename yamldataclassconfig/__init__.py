@@ -4,7 +4,7 @@ from dataclasses import field
 from pathlib import Path
 from typing import Union
 
-__version__ = "1.3.3"
+__version__ = "1.3.4"
 
 
 def create_file_path_field(path: Union[Path, str], path_is_absolute: bool = False) -> Path:
