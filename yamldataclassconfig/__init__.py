@@ -4,7 +4,7 @@ from dataclasses import field
 from pathlib import Path
 from typing import Union
 
-__version__ = "1.3.4"
+__version__ = "1.4.0"
 metadata_dataclasses_json = {"dataclasses_json": {"mm_field": Path}}
 
 
