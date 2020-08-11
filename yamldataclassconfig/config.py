@@ -1,13 +1,13 @@
 """This module implements abstract config class."""
 from abc import ABCMeta
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Union
 
 import yaml
 from dataclasses_json import DataClassJsonMixin
 
-from yamldataclassconfig import build_path, create_file_path_field
+from yamldataclassconfig import build_path, metadata_dataclasses_json
 
 
 @dataclass
@@ -17,7 +17,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # Reason: pylint bug.
     # @see https://github.com/PyCQA/pylint/issues/2698
     # pylint: disable=invalid-name
-    FILE_PATH: Path = create_file_path_field("config.yml")
+    FILE_PATH: Path = field(default=build_path("config.yml"), init=False, metadata=metadata_dataclasses_json)
 
     def load(self, path: Union[Path, str] = None, path_is_absolute: bool = False):
         """
