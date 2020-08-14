@@ -33,7 +33,6 @@ def main():
         packages=find_packages(exclude=("tests*", "myproduct*", "yourproduct*")),
         package_data={"yamldataclassconfig": ["py.typed"]},
         python_requires=">=3.7",
-        setup_requires=["pytest-runner"],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
         version="1.4.0",
     )
