@@ -7,7 +7,9 @@ from typing import Union
 import yaml
 from dataclasses_json import DataClassJsonMixin
 
-from yamldataclassconfig import build_path, metadata_dataclasses_json
+from yamldataclassconfig.utility import build_path, metadata_dataclasses_json
+
+__all__ = ["YamlDataClassConfig"]
 
 
 @dataclass
@@ -29,7 +31,5 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         if path is None:
             path = self.FILE_PATH
         built_path = build_path(path, path_is_absolute)
-        # pylint: disable=no-member
-        with built_path.open("r", encoding="UTF-8") as yml:
-            dictionary_config = yaml.full_load(yml)
+        dictionary_config = yaml.full_load(built_path.read_text(encoding="UTF-8"))
         self.__dict__.update(self.__class__.schema().load(dictionary_config).__dict__)
