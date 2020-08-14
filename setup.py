@@ -25,16 +25,32 @@ def main():
         ],
         dependency_links=[],
         description="This project helps you to import config file writen by YAML to Python data class.",
+        exclude_package_data={"": ["__pycache__", "*.py[co]", ".pytest_cache"]},
+        include_package_data=True,
         install_requires=["dataclasses-json", "pyyaml"],
         keywords="yaml dataclass dataclasses config",
         long_description=readme,
         long_description_content_type="text/markdown",
         name="yamldataclassconfig",
-        packages=find_packages(exclude=("tests*", "myproduct*", "yourproduct*")),
-        package_data={"yamldataclassconfig": ["py.typed"]},
+        packages=find_packages(
+            include=[
+                "yamldataclassconfig",
+                "yamldataclassconfig.*",
+                "tests",
+                "tests.*",
+                "myproduct",
+                "myproduct.*",
+                "yourproduct",
+                "yourproduct.*",
+            ]
+        ),
+        package_data={"yamldataclassconfig": ["py.typed"], "tests": ["*"], "myproduct": ["*"], "yourproduct": ["*"]},
         python_requires=">=3.7",
+        test_suite="tests",
+        tests_require=["pytest>=3"],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
         version="1.4.0",
+        zip_safe=False,
     )
 
 
