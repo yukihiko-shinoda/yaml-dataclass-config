@@ -4,7 +4,7 @@ from typing import List
 from yamldataclassconfig.config import *  # noqa
 from yamldataclassconfig.utility import *  # noqa
 
-__version__ = "1.4.0"
+__version__ = "1.5.0"
 
 __all__: List[str] = []
 # pylint: disable=undefined-variable

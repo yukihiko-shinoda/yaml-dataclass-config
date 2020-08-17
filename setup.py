@@ -52,7 +52,7 @@ def main():
         test_suite="tests",
         tests_require=["pytest>=3"],
         url="https://github.com/yukihiko-shinoda/yaml-dataclass-config",
-        version="1.4.0",
+        version="1.5.0",
         zip_safe=False,
     )
 
