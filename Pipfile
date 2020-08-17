@@ -17,7 +17,6 @@ pipenv-setup = "*"
 pylint = "*"
 pytest = "*"
 radon = "*"
-wheel = "*"
 xenon = "*"
 yamldataclassconfig = {editable = true, path = "."}
 
