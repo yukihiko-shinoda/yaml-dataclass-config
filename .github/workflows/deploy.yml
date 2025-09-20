@@ -15,6 +15,6 @@ jobs:
       - run: python -m pipenv run invoke dist
       # Now, pypa/gh-action-pypi-publish doesn't support major version tag
       # https://github.com/pypa/gh-action-pypi-publish/issues/22
-      - uses: pypa/gh-action-pypi-publish@v1.2.2
+      - uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           password: ${{ secrets.pypi_password }}
