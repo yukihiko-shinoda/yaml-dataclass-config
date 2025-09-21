@@ -43,6 +43,7 @@ dev = [
     "mypy",
     "pylint",
     "pytest",
+    "pytest-resource-path",
     "pyvelocity; python_version >= '3.9'",
     "radon<6.0.0",
     "ruff",
@@ -88,6 +89,8 @@ classifiers = [
 dependencies = [
     # To convert dictionary to model
     "dataclasses-json",
+    # To raise multiple exceptions for validating each field of config file
+    "exceptiongroup; python_version < '3.11'",
     # To convert yaml to dictionary
     "pyyaml",
 ]

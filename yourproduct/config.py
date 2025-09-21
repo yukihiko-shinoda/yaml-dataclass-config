@@ -1,14 +1,38 @@
 from dataclasses import dataclass
+from dataclasses import field
+from datetime import datetime
 from pathlib import Path
-from typing import Optional
 
-from yamldataclassconfig import create_file_path_field
+from dataclasses_json import DataClassJsonMixin
+from marshmallow import fields
+
+from yamldataclassconfig import build_path
+from yamldataclassconfig import metadata_dataclasses_json
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
 @dataclass
-class Config(YamlDataClassConfig):
-    some_property: Optional[str] = None
-    # ...
+class PartConfig(DataClassJsonMixin):
+    property_c: datetime = field(
+        metadata={
+            "dataclasses_json": {
+                "encoder": datetime.isoformat,
+                "decoder": datetime.fromisoformat,
+                "mm_field": fields.DateTime(format="iso"),
+            },
+        },
+    )
 
-    FILE_PATH: Path = create_file_path_field(Path(__file__).parent.parent / 'config.yml')
+
+@dataclass
+class Config(YamlDataClassConfig):
+    some_property: str
+    property_a: int
+    property_b: str
+    part_config: PartConfig = field(metadata={"dataclasses_json": {"mm_field": PartConfig}})
+
+    FILE_PATH: Path = field(
+        init=False,
+        default=build_path(Path(__file__).parent / "config.yml"),
+        metadata=metadata_dataclasses_json,
+    )

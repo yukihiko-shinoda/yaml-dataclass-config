@@ -1,0 +1,5 @@
+some_property: 'test value'
+property_a: 1
+property_b: '2'
+part_config:
+  property_c: '2019-06-25 13:33:30'
