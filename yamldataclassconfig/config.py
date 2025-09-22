@@ -17,6 +17,7 @@ import yaml
 from dataclasses_json import DataClassJsonMixin
 
 from yamldataclassconfig.config_property import create_property_descriptors
+from yamldataclassconfig.config_property import set_deserialization_context
 from yamldataclassconfig.factory import KeyArguments
 from yamldataclassconfig.field_processor import apply_automatic_defaults
 from yamldataclassconfig.utility import build_path
@@ -101,7 +102,13 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # Reason: Ruff's bug
     def _load_and_apply_config(self, dictionary_config: Dict[str, Any]) -> None:  # noqa: UP006
         """Load configuration using marshmallow and apply to instance."""
-        loaded_config = self.__class__.schema().load(dictionary_config)
+        # Set deserialization context to allow property descriptors to return defaults
+        set_deserialization_context(value=True)
+        try:
+            loaded_config = self.__class__.schema().load(dictionary_config)
+        finally:
+            # Always reset the context, even if an exception occurs
+            set_deserialization_context(value=False)
 
         # Set loaded flag first to prevent ConfigNotLoadedError during property access
         self._loaded = True
