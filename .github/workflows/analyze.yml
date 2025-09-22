@@ -15,7 +15,7 @@ jobs:
           python-version: '3.13'
       - run: uv sync
       - run: uv run invoke test.coverage --xml
-      - uses: qltysh/qlty-action/coverage@v1
+      - uses: qltysh/qlty-action/coverage@v2
         with:
           oidc: true
           files: coverage.xml
