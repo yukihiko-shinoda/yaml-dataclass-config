@@ -2,17 +2,21 @@
 
 from __future__ import annotations
 
+import contextlib
 import textwrap
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
 import pytest
-from exceptiongroup import ExceptionGroup  # pylint: disable=redefined-builtin
 
 from yamldataclassconfig.config import YamlDataClassConfig
 from yamldataclassconfig.exceptions import ConfigNotLoadedError
 from yamldataclassconfig.exceptions import ConfigValidationError
 
+# Reason: ExceptionGroup is only available in Python 3.11+.
+with contextlib.suppress(ModuleNotFoundError):
+    # pylint: disable-next=import-error,redefined-builtin
+    from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 if TYPE_CHECKING:
     from pathlib import Path
 

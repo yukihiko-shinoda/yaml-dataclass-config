@@ -2,14 +2,17 @@
 
 from __future__ import annotations
 
+import contextlib
 import dataclasses
 from typing import Any
 
-# Reason: ExceptionGroup is only available in Python 3.11+.
-from exceptiongroup import ExceptionGroup  # pylint: disable=redefined-builtin
-
 from yamldataclassconfig.exceptions import ConfigValidationError
 from yamldataclassconfig.nullable import is_nullable_type
+
+# Reason: ExceptionGroup is only available in Python 3.11+.
+with contextlib.suppress(ModuleNotFoundError):
+    # pylint: disable-next=import-error,redefined-builtin
+    from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 
 
 class ExpectedType:

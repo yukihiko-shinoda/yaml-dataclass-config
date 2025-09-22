@@ -2,14 +2,12 @@
 
 from __future__ import annotations
 
+import contextlib
 import dataclasses
 from typing import Any
 from typing import Union
 
 import pytest
-
-# Reason: ExceptionGroup is only available in Python 3.11+.
-from exceptiongroup import ExceptionGroup  # pylint: disable=redefined-builtin
 
 import yamldataclassconfig.validation as validation_module
 from tests.conftest import SimpleTestConfig
@@ -18,6 +16,11 @@ from yamldataclassconfig.validation import ExpectedType
 from yamldataclassconfig.validation import Validation
 from yamldataclassconfig.validation import YamlFieldValidations
 from yamldataclassconfig.validation import validate_config_if_needed
+
+# Reason: ExceptionGroup is only available in Python 3.11+.
+with contextlib.suppress(ModuleNotFoundError):
+    # pylint: disable-next=import-error,redefined-builtin
+    from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 
 
 class TestExpectedType:

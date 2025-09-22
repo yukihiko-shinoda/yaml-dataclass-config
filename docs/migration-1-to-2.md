@@ -153,9 +153,17 @@ except Exception as e:
 
 **After (v2.x):**
 
+If you are using Python < 3.11, install `exceptiongroup`:
+
+```console
+pip install exceptiongroup
+```
+
 ```python
-# Enhanced validation with ExceptionGroup for multiple errors
-from exceptiongroup import ExceptionGroup
+# Reason: ExceptionGroup is only available in Python 3.11+.
+with contextlib.suppress(ModuleNotFoundError):
+    # pylint: disable-next=import-error,redefined-builtin
+    from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 
 try:
     CONFIG.load()
