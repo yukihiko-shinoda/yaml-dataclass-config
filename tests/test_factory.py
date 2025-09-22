@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Dict
+from typing import List
+from typing import Set
+
 from tests.conftest import ComplexNonConfigDataclass
 from tests.conftest import NonDataclassForTesting
 from tests.conftest import SimpleTestConfig
@@ -21,9 +25,9 @@ class TestFactoryModule:
 
     def test_get_type_default_generic_types(self) -> None:
         """Test _get_type_default with generic types - covers lines 27-35."""
-        assert _get_type_default(list[str]) == []
-        assert _get_type_default(dict[str, int]) == {}
-        assert _get_type_default(set[str]) == set()
+        assert _get_type_default(List[str]) == []
+        assert _get_type_default(Dict[str, int]) == {}
+        assert _get_type_default(Set[str]) == set()
 
     def test_get_type_default_unknown_type(self) -> None:
         """Test _get_type_default with unknown type - covers line 37."""

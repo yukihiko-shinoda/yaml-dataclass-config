@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
-import contextlib
 import dataclasses
+import sys
 from typing import Any
+from typing import Dict
+from typing import List
+from typing import Type
 from typing import Union
 
 import pytest
@@ -18,7 +21,7 @@ from yamldataclassconfig.validation import YamlFieldValidations
 from yamldataclassconfig.validation import validate_config_if_needed
 
 # Reason: ExceptionGroup is only available in Python 3.11+.
-with contextlib.suppress(ModuleNotFoundError):
+if sys.version_info < (3, 11):  # pragma nocover
     # pylint: disable-next=import-error,redefined-builtin
     from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 
@@ -52,9 +55,9 @@ class TestExpectedType:
     def test_get_actual_non_nullable_type_with_args(self) -> None:
         """Test get_actual with non-nullable type that has __args__ - covers line 27."""
         # Using list[str] which has __args__ but is not nullable
-        expected_type = ExpectedType(list[str])
+        expected_type = ExpectedType(List[str])
         result = expected_type.get_actual()
-        assert result == list[str]  # Should return type as-is since it's not nullable
+        assert result == List[str]  # Should return type as-is since it's not nullable
 
     def test_get_actual_nullable_type_without_args(self) -> None:
         """Test get_actual with nullable type that somehow has no __args__ - covers line 27."""
@@ -232,7 +235,8 @@ class TestYamlFieldValidations:
     def test_validate_skip_missing_type_hints(self) -> None:
         """Test that fields without type hints are skipped."""
         config = {"name": "test", "extra_field": "value"}
-        type_hints: dict[str, type] = {"name": str}
+        # Reason: Ruff's bug
+        type_hints: Dict[str, Type[Any]] = {"name": str}  # noqa: UP006
 
         validations = YamlFieldValidations(config, type_hints)
         # Should not raise any exception (extra_field is ignored)
@@ -245,7 +249,8 @@ class TestValidateConfigIfNeeded:
     def test_validate_config_empty_type_hints(self) -> None:
         """Test with empty type hints (should return early)."""
         config = {"name": "test"}
-        type_hints: dict[str, Any] = {}
+        # Reason: Ruff's bug
+        type_hints: Dict[str, Any] = {}  # noqa: UP006
 
         # Should not raise any exception
         validate_config_if_needed(config, type_hints)

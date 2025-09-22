@@ -2,6 +2,10 @@
 
 from __future__ import annotations
 
+from typing import Dict
+from typing import List
+from typing import Set
+
 from yamldataclassconfig.type_defaults import get_default_for_type
 
 
@@ -18,9 +22,9 @@ class TestTypeDefaultsModule:
     def test_get_default_for_type_generic_types(self) -> None:
         """Test get_default_for_type with generic types - covers lines 29-38."""
         # These should return callable factories for mutable types
-        assert get_default_for_type(list[str]) is list
-        assert get_default_for_type(dict[str, int]) is dict
-        assert get_default_for_type(set[str]) is set
+        assert get_default_for_type(List[str]) is list
+        assert get_default_for_type(Dict[str, int]) is dict
+        assert get_default_for_type(Set[str]) is set
 
     def test_get_default_for_type_unknown_type(self) -> None:
         """Test get_default_for_type with unknown type - covers lines 40-41."""

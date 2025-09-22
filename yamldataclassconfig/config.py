@@ -7,6 +7,9 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import TYPE_CHECKING
 from typing import Any
+from typing import Dict
+from typing import Optional
+from typing import Union
 from typing import cast
 from typing import get_type_hints
 
@@ -67,7 +70,8 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         # Add property descriptors for validation
         create_property_descriptors(cls)
 
-    def load(self, path: Path | str | None = None, *, path_is_absolute: bool = False) -> None:
+    # Reason: Ruff's bug
+    def load(self, path: Optional[Union[Path, str]] = None, *, path_is_absolute: bool = False) -> None:  # noqa: UP007,UP045
         """This method loads from YAML file to properties of self instance with validation.
 
         Why doesn't load when __init__ is to make the following requirements compatible:
@@ -82,17 +86,20 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
 
         self._load_and_apply_config(dictionary_config)
 
-    def _resolve_config_path(self, path: Path | str | None, *, path_is_absolute: bool) -> Path:
+    # Reason: Ruff's bug
+    def _resolve_config_path(self, path: Optional[Union[Path, str]], *, path_is_absolute: bool) -> Path:  # noqa: UP007,UP045
         """Resolve the configuration file path."""
         if path is None:
             path = self.FILE_PATH
         return resolve_path(path, path_is_absolute=path_is_absolute)
 
-    def _load_yaml_content(self, config_path: Path) -> dict[str, Any]:
+    # Reason: Ruff's bug
+    def _load_yaml_content(self, config_path: Path) -> Dict[str, Any]:  # noqa: UP006
         """Load YAML content from file."""
-        return cast("dict[str, Any]", yaml.full_load(config_path.read_text(encoding="UTF-8")))
+        return cast("Dict[str, Any]", yaml.full_load(config_path.read_text(encoding="UTF-8")))
 
-    def _load_and_apply_config(self, dictionary_config: dict[str, Any]) -> None:
+    # Reason: Ruff's bug
+    def _load_and_apply_config(self, dictionary_config: Dict[str, Any]) -> None:  # noqa: UP006
         """Load configuration using marshmallow and apply to instance."""
         loaded_config = self.__class__.schema().load(dictionary_config)
 

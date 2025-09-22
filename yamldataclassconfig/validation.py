@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
-import contextlib
 import dataclasses
+import sys
 from typing import Any
+from typing import Dict
+from typing import List
 from typing import Optional
+from typing import Tuple
 from typing import Type
 from typing import Union
 
@@ -13,7 +16,7 @@ from yamldataclassconfig.exceptions import ConfigValidationError
 from yamldataclassconfig.nullable import is_nullable_type
 
 # Reason: ExceptionGroup is only available in Python 3.11+.
-with contextlib.suppress(ModuleNotFoundError):
+if sys.version_info < (3, 11):  # pragma nocover
     # pylint: disable-next=import-error,redefined-builtin
     from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 
@@ -41,7 +44,7 @@ class ExpectedType:
         return self.get_single_non_none_type(args, self.expected_type)
 
     # Reason: Ruff's bug
-    def _get_type_args(self) -> Optional[Union[tuple[Any, ...], list[Any]]]:  # noqa: UP007,UP045
+    def _get_type_args(self) -> Optional[Union[Tuple[Any, ...], List[Any]]]:  # noqa: UP006,UP007,UP045
         """Get type arguments from a type if they exist and are iterable."""
         args = getattr(self.expected_type, "__args__", None)
         if args is None or not isinstance(args, (tuple, list)):
@@ -50,7 +53,7 @@ class ExpectedType:
 
     @staticmethod
     # Reason: Ruff's bug
-    def get_single_non_none_type(args: Union[tuple[Any, ...], list[Any]], fallback_type: Type[Any]) -> Type[Any]:  # noqa: UP006,UP007
+    def get_single_non_none_type(args: Union[Tuple[Any, ...], List[Any]], fallback_type: Type[Any]) -> Type[Any]:  # noqa: UP006,UP007
         """Extract single non-None type from args, return fallback if not exactly one."""
         non_none_types = [arg for arg in args if arg is not type(None)]
         if len(non_none_types) == 1:
@@ -64,7 +67,8 @@ class Validation:
 
     field_name: str
     yaml_value: Any
-    expected_type: type
+    # Reason: Ruff's bug
+    expected_type: Type[Any]  # noqa: UP006
 
     # Reason: Ruff's bug
     def validate(self) -> Optional[ConfigValidationError]:  # noqa: UP045
@@ -92,7 +96,8 @@ class Validation:
 class YamlFieldValidations:
     """Represents the validation state of YAML fields."""
 
-    def __init__(self, dictionary_config: dict[str, Any], type_hints: dict[str, type]) -> None:
+    # Reason: Ruff's bug
+    def __init__(self, dictionary_config: Dict[str, Any], type_hints: Dict[str, Type[Any]]) -> None:  # noqa: UP006
         self.validations = (
             Validation(field_name, yaml_value, type_hints[field_name])
             for field_name, yaml_value in dictionary_config.items()
@@ -107,7 +112,8 @@ class YamlFieldValidations:
             raise ExceptionGroup(group_msg, errors)
 
 
-def validate_config_if_needed(dictionary_config: dict[str, Any], type_hints: dict[str, Any]) -> None:
+# Reason: Ruff's bug
+def validate_config_if_needed(dictionary_config: Dict[str, Any], type_hints: Dict[str, Any]) -> None:  # noqa: UP006
     """Validate configuration if type hints are present."""
     if not type_hints or not any(name != "FILE_PATH" for name in type_hints):
         return

@@ -5,6 +5,9 @@ from __future__ import annotations
 import dataclasses
 from dataclasses import field
 from typing import TYPE_CHECKING
+from typing import Dict
+from typing import List
+from typing import Tuple
 from typing import cast
 from typing import get_type_hints
 
@@ -18,7 +21,8 @@ if TYPE_CHECKING:
 class TypeHint:
     """Represents a type hint for a dataclass field."""
 
-    def __init__(self, type_hints: dict[str, Any], field_name: str) -> None:
+    # Reason: Ruff's bug
+    def __init__(self, type_hints: Dict[str, Any], field_name: str) -> None:  # noqa: UP006
         self.field_name = field_name
         self.field_type = type_hints.get(field_name)
         self.default = None
@@ -54,7 +58,8 @@ class DataClass:
         valid_type_hints = self._filter_valid_type_hints(processable_fields)
         self._apply_defaults_to_fields(valid_type_hints)
 
-    def _get_processable_fields(self) -> list[tuple[str, Field[Any]]]:
+    # Reason: Ruff's bug
+    def _get_processable_fields(self) -> List[Tuple[str, Field[Any]]]:  # noqa: UP006
         """Get fields that can be processed for automatic defaults."""
         return [
             (field_name, field_obj)
@@ -62,12 +67,14 @@ class DataClass:
             if not self.is_already_processed(field_obj)
         ]
 
-    def _filter_valid_type_hints(self, fields: list[tuple[str, Field[Any]]]) -> list[TypeHint]:
+    # Reason: Ruff's bug
+    def _filter_valid_type_hints(self, fields: List[Tuple[str, Field[Any]]]) -> List[TypeHint]:  # noqa: UP006
         """Filter type hints that can have default values applied."""
         type_hints = [TypeHint(self.type_hints, field_name) for field_name, _ in fields]
         return [hint for hint in type_hints if hint.try_to_get_default_value()]
 
-    def _apply_defaults_to_fields(self, type_hints: list[TypeHint]) -> None:
+    # Reason: Ruff's bug
+    def _apply_defaults_to_fields(self, type_hints: List[TypeHint]) -> None:  # noqa: UP006
         """Apply automatic defaults to the specified type hints."""
         for type_hint in type_hints:
             self.cls.__dataclass_fields__[type_hint.field_name] = type_hint.get_automatic_default()

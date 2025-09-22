@@ -8,8 +8,11 @@ from dataclasses import field
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from typing import Dict
 from typing import Generator
+from typing import List
 from typing import Optional
+from typing import Set
 from typing import Type
 
 import pytest
@@ -18,8 +21,6 @@ from marshmallow import fields
 
 from yamldataclassconfig.config import YamlDataClassConfig
 from yamldataclassconfig.utility import build_path
-
-collect_ignore = ["setup.py"]
 
 
 @pytest.fixture
@@ -68,15 +69,17 @@ class ComplexNonConfigDataclass:  # pylint: disable=too-many-instance-attributes
     score: float
 
     # Generic types
-    items: list[str]
-    mapping: dict[str, int]
-    tags: set[str]
+    # Reason: Ruff's bug
+    items: List[str]  # noqa: UP006
+    mapping: Dict[str, int]  # noqa: UP006
+    tags: Set[str]  # noqa: UP006
 
     # Fields with defaults
     optional_field: str = "default"
 
     # Field with default_factory
-    dynamic_list: list[int] = field(default_factory=list)
+    # Reason: Ruff's bug
+    dynamic_list: List[int] = field(default_factory=list)  # noqa: UP006
 
     # Init=False field
     computed: str = field(init=False, default="computed")

@@ -160,8 +160,9 @@ pip install exceptiongroup
 ```
 
 ```python
+import sys
 # Reason: ExceptionGroup is only available in Python 3.11+.
-with contextlib.suppress(ModuleNotFoundError):
+if sys.version_info < (3, 11):  # pragma nocover
     # pylint: disable-next=import-error,redefined-builtin
     from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 

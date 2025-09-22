@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-import contextlib
+import sys
 import textwrap
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
@@ -14,7 +14,7 @@ from yamldataclassconfig.exceptions import ConfigNotLoadedError
 from yamldataclassconfig.exceptions import ConfigValidationError
 
 # Reason: ExceptionGroup is only available in Python 3.11+.
-with contextlib.suppress(ModuleNotFoundError):
+if sys.version_info < (3, 11):  # pragma nocover
     # pylint: disable-next=import-error,redefined-builtin
     from exceptiongroup import ExceptionGroup  # type: ignore[import-not-found]
 if TYPE_CHECKING:

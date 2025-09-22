@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Dict
+from typing import List
+from typing import Set
 from typing import Type
 
 __all__ = [
@@ -35,6 +38,9 @@ def get_default_for_type(field_type: Type[Any]) -> Any:  # noqa: ANN401,UP006
             list: list,
             dict: dict,
             set: set,
+            List: list,
+            Dict: dict,
+            Set: set,
         }
         if origin in mutable_defaults:
             return mutable_defaults[origin]

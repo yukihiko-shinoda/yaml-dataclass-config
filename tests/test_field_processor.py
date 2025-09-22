@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Any
+from typing import Dict
 
 import pytest
 
@@ -27,7 +28,8 @@ class TestFieldProcessorModule:
 
     def test_type_hint_no_field_type(self) -> None:
         """Test TypeHint.try_to_get_default_value with missing field type - covers lines 27-28."""
-        type_hints: dict[str, Any] = {}
+        # Reason: Ruff's bug
+        type_hints: Dict[str, Any] = {}  # noqa: UP006
         hint = TypeHint(type_hints, "unknown_field")
 
         result = hint.try_to_get_default_value()

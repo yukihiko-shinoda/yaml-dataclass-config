@@ -4,7 +4,10 @@ from __future__ import annotations
 
 import dataclasses
 from typing import Any
+from typing import Dict
 from typing import Generic
+from typing import List
+from typing import Set
 from typing import Type
 from typing import TypeVar
 from typing import get_type_hints
@@ -29,10 +32,14 @@ def _get_type_default(field_type: Type[Any]) -> Any:  # noqa: ANN401,UP006
     # Handle generic types
     if hasattr(field_type, "__origin__"):
         origin = field_type.__origin__
-        origin_defaults: dict[type, Any] = {
+        # Reason: Ruff's bug
+        origin_defaults: Dict[Type[Any], Any] = {  # noqa: UP006
             list: [],
             dict: {},
             set: set(),
+            List: [],
+            Dict: {},
+            Set: set(),
         }
         return origin_defaults.get(origin)
 
@@ -44,7 +51,7 @@ class KeyArguments(Generic[T]):
 
     # UP006: Ruff's bug
     def __init__(self, cls: Type[T], **kwargs: Any) -> None:  # noqa: ANN401,UP006
-        self.init_kwargs: dict[str, Any] = {}
+        self.init_kwargs: Dict[str, Any] = {}  # noqa: UP006
         self.cls = cls
         self.type_hints = get_type_hints(self.cls)
         self.kwargs = kwargs
