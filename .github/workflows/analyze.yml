@@ -1,19 +1,22 @@
 on:
   push:
     branches:
-      - master
+      - main
 jobs:
   analyze:
+    permissions:
+      contents: read
+      id-token: write
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.8'
-      - run: python -m pip install pipenv
-      - run: python -m pipenv install --skip-lock --dev
-      - uses: paambaati/codeclimate-action@v2.6.0
-        env:
-          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          python-version: '3.13'
+      - run: uv sync
+      - run: uv run invoke test.coverage --xml
+      - uses: qltysh/qlty-action/coverage@v1
         with:
-          coverageCommand: python -m pipenv run invoke coverage --xml
+          oidc: true
+          files: coverage.xml
+          format: cobertura

@@ -1,13 +1,13 @@
 # YAML Data Class Config
 
 [![Test](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ATest)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/test_coverage)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/maintainability)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/maintainability)
-[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/yukihiko-shinoda/yaml-dataclass-config)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config)
-[![Updates](https://pyup.io/repos/github/yukihiko-shinoda/yaml-dataclass-config/shield.svg)](https://pyup.io/repos/github/yukihiko-shinoda/yaml-dataclass-config/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![CodeQL](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ACodeQL)
+[![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
+[![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
+[![Dependabot](https://flat.badgen.net/github/dependabot/yukihiko-shinoda/yaml-dataclass-config?icon=dependabot)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/security/dependabot)
+[![Python versions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
-[![Twitter URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
+[![X URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](https://x.com/intent/post?text=YAML%20Data%20Class%20Config&url=https%3A%2F%2Fpypi.org%2Fproject%2Fyamldataclassconfig%2F&hashtags=python)
 
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).
