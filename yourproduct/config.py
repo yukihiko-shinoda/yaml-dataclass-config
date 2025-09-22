@@ -7,7 +7,6 @@ from dataclasses_json import DataClassJsonMixin
 from marshmallow import fields
 
 from yamldataclassconfig import build_path
-from yamldataclassconfig import metadata_dataclasses_json
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
@@ -31,8 +30,7 @@ class Config(YamlDataClassConfig):
     property_b: str
     part_config: PartConfig = field(metadata={"dataclasses_json": {"mm_field": PartConfig}})
 
-    FILE_PATH: Path = field(
+    FILE_PATH: str = field(
         init=False,
         default=build_path(Path(__file__).parent / "config.yml"),
-        metadata=metadata_dataclasses_json,
     )

@@ -32,7 +32,7 @@ class TestIsNullableType:
     def test_is_nullable_type_modern_union_with_none(self) -> None:
         """Test is_nullable_type returns True for modern union syntax with None."""
         # Use eval to create the union type to avoid syntax errors on older Python
-        union_type = eval("str | None")  # pylint: disable=eval-used
+        union_type = eval("str | None")  # nosec  # noqa: DUO104,RUF100,S307 pylint: disable=eval-used
         result = is_nullable_type(union_type)
         assert result is True
 
@@ -40,6 +40,6 @@ class TestIsNullableType:
     def test_is_nullable_type_modern_union_without_none(self) -> None:
         """Test is_nullable_type returns False for modern union syntax without None."""
         # Use eval to create the union type to avoid syntax errors on older Python
-        union_type = eval("str | int")  # pylint: disable=eval-used
+        union_type = eval("str | int")  # nosec  # noqa: DUO104,RUF100,S307 pylint: disable=eval-used
         result = is_nullable_type(union_type)
         assert result is False

@@ -16,7 +16,6 @@ from marshmallow import fields
 
 from yamldataclassconfig.config import YamlDataClassConfig
 from yamldataclassconfig.utility import build_path
-from yamldataclassconfig.utility import metadata_dataclasses_json
 
 collect_ignore = ["setup.py"]
 
@@ -134,13 +133,12 @@ def dataclass_config_success_specify_absolute_file_path(
     class DataClassConfigSuccessSpecifyAbsoluteFilePath(DataClassConfigB):
         """For test."""
 
-        FILE_PATH: Path = field(
+        FILE_PATH: str = field(
             init=False,
             default=build_path(
                 resource_path_root / "config_b.yml",
                 path_is_absolute=True,
             ),
-            metadata=metadata_dataclasses_json,
         )
 
     return DataClassConfigSuccessSpecifyAbsoluteFilePath
@@ -154,10 +152,9 @@ def dataclass_config_success_specify_file_path(resource_path_root: Path) -> type
     class DataClassConfigSuccessSpecifyFilePath(DataClassConfigA):
         """For test."""
 
-        FILE_PATH: Path = field(
+        FILE_PATH: str = field(
             init=False,
             default=build_path(resource_path_root / "config_a.yml"),
-            metadata=metadata_dataclasses_json,
         )
 
     return DataClassConfigSuccessSpecifyFilePath

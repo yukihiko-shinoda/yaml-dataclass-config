@@ -25,7 +25,7 @@ def test_line_89_default_file_path(temporary_yaml_file: Path) -> None:
     """Test to ensure config.py line 89 (default FILE_PATH usage) is executed."""
     # Create config instance with FILE_PATH set
     config = DefaultPathTestConfig.create()
-    config.FILE_PATH = temporary_yaml_file
+    config.FILE_PATH = str(temporary_yaml_file)
 
     # Call load without path parameter - this should trigger line 89: path = self.FILE_PATH
     config.load()

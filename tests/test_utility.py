@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import tempfile
 from pathlib import Path
 
 import pytest
 
 from yamldataclassconfig import build_path
 from yamldataclassconfig.utility import create_file_path_field
+from yamldataclassconfig.utility import resolve_path
 
 
 class TestFunctions:
@@ -33,7 +35,7 @@ class TestFunctions:
     )
     def test_build_path_relative(argument: Path | str, expected: Path) -> None:
         """Function should return Path object by argument as relative path."""
-        assert build_path(argument) == expected
+        assert build_path(argument) == str(expected)
 
     @staticmethod
     @pytest.mark.parametrize(
@@ -51,7 +53,7 @@ class TestFunctions:
     )
     def test_build_path_absolute(argument: Path | str, expected: Path) -> None:
         """Function should return Path object by argument as absolute path."""
-        assert build_path(argument, path_is_absolute=True) == expected
+        assert build_path(argument, path_is_absolute=True) == str(expected)
 
 
 class TestUtilityCoverage:
@@ -64,7 +66,7 @@ class TestUtilityCoverage:
         field_instance = create_file_path_field(absolute_path, path_is_absolute=True)
 
         # Verify field was created correctly
-        assert field_instance.default == Path(absolute_path)  # type: ignore[attr-defined]
+        assert field_instance.default == absolute_path  # type: ignore[attr-defined]
         assert field_instance.init is False  # type: ignore[attr-defined]
         assert field_instance.metadata is not None  # type: ignore[attr-defined]
 
@@ -74,6 +76,37 @@ class TestUtilityCoverage:
         field_instance = create_file_path_field(relative_path, path_is_absolute=False)
 
         # Verify field was created correctly
-        assert isinstance(field_instance.default, Path)  # type: ignore[attr-defined]
+        assert isinstance(field_instance.default, str)  # type: ignore[attr-defined]
         assert field_instance.init is False  # type: ignore[attr-defined]
         assert field_instance.metadata is not None  # type: ignore[attr-defined]
+
+
+class TestResolvePath:
+    """Test resolve_path function for missing coverage."""
+
+    def test_resolve_path_absolute_string(self) -> None:
+        """Test resolve_path with absolute string path."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            absolute_path = f"{temp_dir}/config.yml"
+            result = resolve_path(absolute_path, path_is_absolute=True)
+
+            assert result == Path(absolute_path)
+            assert isinstance(result, Path)
+
+    def test_resolve_path_absolute_path_object(self) -> None:
+        """Test resolve_path with absolute Path object."""
+        with tempfile.TemporaryDirectory() as temp_dir:
+            absolute_path = Path(temp_dir) / "config.yml"
+            result = resolve_path(absolute_path, path_is_absolute=True)
+
+            assert result == absolute_path
+            assert isinstance(result, Path)
+
+    def test_resolve_path_relative(self) -> None:
+        """Test resolve_path with relative path (already covered but for completeness)."""
+        relative_path = "config.yml"
+        result = resolve_path(relative_path, path_is_absolute=False)
+
+        expected = Path.cwd() / relative_path
+        assert result == expected
+        assert isinstance(result, Path)

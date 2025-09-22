@@ -5,12 +5,7 @@ from __future__ import annotations
 from abc import ABCMeta
 from dataclasses import dataclass
 from dataclasses import field
-
-# Reason: Following error occurs without this import:
-#     self.__dict__.update(self.__class__.schema().load(dictionary_config).__dict__)  # noqa: ERA001
-#                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-#   NameError: name 'Path' is not defined
-from pathlib import Path  # noqa: TC003
+from typing import TYPE_CHECKING
 from typing import Any
 from typing import Self
 from typing import cast
@@ -23,8 +18,11 @@ from yamldataclassconfig.config_property import create_property_descriptors
 from yamldataclassconfig.factory import KeyArguments
 from yamldataclassconfig.field_processor import apply_automatic_defaults
 from yamldataclassconfig.utility import build_path
-from yamldataclassconfig.utility import metadata_dataclasses_json
+from yamldataclassconfig.utility import resolve_path
 from yamldataclassconfig.validation import validate_config_if_needed
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 __all__ = [
     "YamlDataClassConfig",
@@ -38,7 +36,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # Reason: pylint bug.
     # @see https://github.com/PyCQA/pylint/issues/2698
     # pylint: disable=invalid-name
-    FILE_PATH: Path = field(default=build_path("config.yml"), init=False, metadata=metadata_dataclasses_json)
+    FILE_PATH: str = field(default=build_path("config.yml"), init=False)
     _loaded: bool = field(default=False, init=False)
 
     @classmethod
@@ -87,7 +85,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         """Resolve the configuration file path."""
         if path is None:
             path = self.FILE_PATH
-        return build_path(path, path_is_absolute=path_is_absolute)
+        return resolve_path(path, path_is_absolute=path_is_absolute)
 
     def _load_yaml_content(self, config_path: Path) -> dict[str, Any]:
         """Load YAML content from file."""

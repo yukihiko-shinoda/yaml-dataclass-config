@@ -31,6 +31,5 @@ class ConfigProperty:
 def create_property_descriptors(cls: type) -> None:
     """Create property descriptors for class annotations."""
     annotations = getattr(cls, "__annotations__", {})
-    for field_name in annotations:
-        if field_name != "FILE_PATH":
-            setattr(cls, field_name, ConfigProperty(field_name))
+    for field_name in (field_name for field_name in annotations if field_name != "FILE_PATH"):
+        setattr(cls, field_name, ConfigProperty(field_name))
