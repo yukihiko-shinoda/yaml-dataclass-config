@@ -76,33 +76,35 @@ part_config:
 Anywhere is OK, for example, I prefer to place on `myproduct/config.py`
 
 ```python
-from __future__ import annotations
-
 from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
 
 from dataclasses_json import DataClassJsonMixin
 from marshmallow import fields
+
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
 @dataclass
 class PartConfig(DataClassJsonMixin):
-    property_c: datetime = field(metadata={'dataclasses_json': {
-        'encoder': datetime.isoformat,
-        'decoder': datetime.fromisoformat,
-        'mm_field': fields.DateTime(format='iso')
-    }})
+    property_c: datetime = field(
+        metadata={
+            "dataclasses_json": {
+                "encoder": datetime.isoformat,
+                "decoder": datetime.fromisoformat,
+                "mm_field": fields.DateTime(format="iso"),
+            },
+        },
+    )
 
 
 @dataclass
 class Config(YamlDataClassConfig):
-    property_a: int | None = None
-    property_b: str | None = None
-    part_config: PartConfig | None = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfig}}
+    property_a: int
+    property_b: str
+    part_config: PartConfig = field(
+        metadata={"dataclasses_json": {"mm_field": PartConfig}},
     )
 ```
 
@@ -147,21 +149,23 @@ override `FILE_PATH` property.
 Ex:
 
 ```python
-from __future__ import annotations
-
 from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
 
-from yamldataclassconfig import create_file_path_field
+from yamldataclassconfig import build_path
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
 @dataclass
 class Config(YamlDataClassConfig):
-    some_property: str | None = None
+    some_property: str
     # ...
 
-    FILE_PATH: Path = field(init=False, default=create_file_path_field(Path(__file__).parent.parent / 'config.yml'))
+    FILE_PATH: str = field(
+        init=False,
+        default=build_path(Path(__file__).parent / "config.yml"),
+    )
 ```
 
 <!-- markdownlint-disable no-trailing-punctuation -->
@@ -175,8 +179,6 @@ When setup on unit testing, you can call `Config.load()` with argument.
 Case when unittest:
 
 ```python
-from __future__ import annotations
-
 from pathlib import Path
 import unittest
 
@@ -190,8 +192,6 @@ class ConfigurableTestCase(unittest.TestCase):
 Case when pytest:
 
 ```python
-from __future__ import annotations
-
 from pathlib import Path
 from typing import Generator
 
@@ -221,8 +221,6 @@ Then, set target directory which config.yml should be placed into `path_target_d
 Case when unittest:
 
 ```python
-from __future__ import annotations
-
 from pathlib import Path
 import unittest
 
@@ -247,8 +245,6 @@ class ConfigurableTestCase(unittest.TestCase):
 Case when pytest:
 
 ```python
-from __future__ import annotations
-
 from pathlib import Path
 from typing import Generator
 
