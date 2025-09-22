@@ -4,11 +4,13 @@ from __future__ import annotations
 
 from dataclasses import field
 from pathlib import Path
+from typing import Union
 
 __all__ = ["build_path", "create_file_path_field"]
 
 
-def create_file_path_field(path: Path | str, *, path_is_absolute: bool = False) -> str:
+# Reason: Ruff's bug
+def create_file_path_field(path: Union[Path, str], *, path_is_absolute: bool = False) -> str:  # noqa: UP007
     """This function build and return FILE_PATH on YamlDataClassConfig class.
 
     :param path: path to YAML config file
@@ -21,7 +23,8 @@ def create_file_path_field(path: Path | str, *, path_is_absolute: bool = False) 
     return field_instance
 
 
-def build_path(path: Path | str, *, path_is_absolute: bool = False) -> str:
+# Reason: Ruff's bug
+def build_path(path: Union[Path, str], *, path_is_absolute: bool = False) -> str:  # noqa: UP007
     """This function build Path instance from arguments and returns it.
 
     :param path: path
@@ -35,7 +38,8 @@ def build_path(path: Path | str, *, path_is_absolute: bool = False) -> str:
     return str(path)
 
 
-def resolve_path(path: Path | str, *, path_is_absolute: bool = False) -> Path:
+# Reason: Ruff's bug
+def resolve_path(path: Union[Path, str], *, path_is_absolute: bool = False) -> Path:  # noqa: UP007
     """Resolve the given path to an absolute Path object.
 
     :param path: The path to resolve.

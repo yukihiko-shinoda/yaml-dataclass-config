@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from dataclasses import field
 from datetime import datetime
 from typing import TYPE_CHECKING
+from typing import Optional
+from typing import Union
 
 import pytest
 from dataclasses_json import DataClassJsonMixin
@@ -41,9 +43,10 @@ class DataClassConfigSuccess(YamlDataClassConfig):
 class DataClassConfigFail(YamlDataClassConfig):
     """For test."""
 
-    property_a: int | None = None
-    property_b: str | None = None
-    part_config_a: PartConfigA | None = field(
+    # Reason: Ruff's bug
+    property_a: Optional[int] = None  # noqa: UP045
+    property_b: Optional[str] = None  # noqa: UP045
+    part_config_a: Optional[PartConfigA] = field(  # noqa: UP045
         default=None,
         metadata={"dataclasses_json": {"mm_field": PartConfigA}},
     )
@@ -108,7 +111,8 @@ class DataClassConfigFail(YamlDataClassConfig):
         assert config.property_d == "4"
 
     @staticmethod
-    def check_part_config_a(config: DataClassConfigA | DataClassConfigB) -> None:
+    # Reason: Ruff's bug
+    def check_part_config_a(config: Union[DataClassConfigA, DataClassConfigB]) -> None:  # noqa: UP007
         assert config.part_config_a is not None
         assert config.part_config_a.property_a == 1
         assert config.part_config_a.property_b == "2"

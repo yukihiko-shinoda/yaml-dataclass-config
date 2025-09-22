@@ -5,6 +5,8 @@ from __future__ import annotations
 import contextlib
 import dataclasses
 from typing import Any
+from typing import Optional
+from typing import Union
 
 from yamldataclassconfig.exceptions import ConfigValidationError
 from yamldataclassconfig.nullable import is_nullable_type
@@ -35,7 +37,8 @@ class ExpectedType:
 
         return self.get_single_non_none_type(args, self.expected_type)
 
-    def _get_type_args(self) -> tuple[Any, ...] | list[Any] | None:
+    # Reason: Ruff's bug
+    def _get_type_args(self) -> Optional[Union[tuple[Any, ...], list[Any]]]:  # noqa: UP007,UP045
         """Get type arguments from a type if they exist and are iterable."""
         args = getattr(self.expected_type, "__args__", None)
         if args is None or not isinstance(args, (tuple, list)):
@@ -43,7 +46,8 @@ class ExpectedType:
         return args  # type: ignore[no-any-return]
 
     @staticmethod
-    def get_single_non_none_type(args: tuple[Any, ...] | list[Any], fallback_type: type) -> type:
+    # Reason: Ruff's bug
+    def get_single_non_none_type(args: Union[tuple[Any, ...], list[Any]], fallback_type: type) -> type:  # noqa: UP007
         """Extract single non-None type from args, return fallback if not exactly one."""
         non_none_types = [arg for arg in args if arg is not type(None)]
         if len(non_none_types) == 1:
@@ -59,7 +63,8 @@ class Validation:
     yaml_value: Any
     expected_type: type
 
-    def validate(self) -> ConfigValidationError | None:
+    # Reason: Ruff's bug
+    def validate(self) -> Optional[ConfigValidationError]:  # noqa: UP045
         """Validate the YAML field against its expected type."""
         actual_expected_type = ExpectedType(self.expected_type).get_actual()
 

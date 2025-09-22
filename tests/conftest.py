@@ -9,6 +9,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from typing import Generator
+from typing import Optional
 
 import pytest
 from dataclasses_json import DataClassJsonMixin
@@ -118,12 +119,14 @@ class DataClassConfigA(YamlDataClassConfig):
 class DataClassConfigB(YamlDataClassConfig):
     """For test."""
 
-    part_config_a: PartConfigA | None = field(
+    # Reason: Ruff's bug
+    part_config_a: Optional[PartConfigA] = field(  # noqa: UP045
         default=None,
         metadata={"dataclasses_json": {"mm_field": PartConfigA}},
     )
-    property_c: int | None = None
-    property_d: str | None = None
+    # Reason: Ruff's bug
+    property_c: Optional[int] = None  # noqa: UP045
+    property_d: Optional[str] = None  # noqa: UP045
 
 
 @pytest.fixture

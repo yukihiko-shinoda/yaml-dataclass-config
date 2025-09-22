@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Optional
 
 from yamldataclassconfig.exceptions import ConfigNotLoadedError
 
@@ -14,7 +15,8 @@ class ConfigProperty:
         self.name = name
         self.private_name = f"__{name}"
 
-    def __get__(self, obj: Any, objtype: type | None = None) -> Any:  # noqa: ANN401
+    # UP045: Ruff's bug
+    def __get__(self, obj: Any, objtype: Optional[type] = None) -> Any:  # noqa: ANN401,UP045
         if obj is None:
             return self
 

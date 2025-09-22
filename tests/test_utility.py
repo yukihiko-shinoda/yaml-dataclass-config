@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import tempfile
 from pathlib import Path
+from typing import Union
 
 import pytest
 
@@ -33,7 +34,8 @@ class TestFunctions:
             (Path("../config_a.yml"), Path.cwd() / "../config_a.yml"),
         ],
     )
-    def test_build_path_relative(argument: Path | str, expected: Path) -> None:
+    # Reason: Ruff's bug
+    def test_build_path_relative(argument: Union[Path, str], expected: Path) -> None:  # noqa: UP007
         """Function should return Path object by argument as relative path."""
         assert build_path(argument) == str(expected)
 
@@ -51,7 +53,8 @@ class TestFunctions:
             (Path.cwd() / "../config_a.yml", Path.cwd() / "../config_a.yml"),
         ],
     )
-    def test_build_path_absolute(argument: Path | str, expected: Path) -> None:
+    # Reason: Ruff's bug
+    def test_build_path_absolute(argument: Union[Path, str], expected: Path) -> None:  # noqa: UP007
         """Function should return Path object by argument as absolute path."""
         assert build_path(argument, path_is_absolute=True) == str(expected)
 
