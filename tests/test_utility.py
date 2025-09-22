@@ -62,7 +62,7 @@ class TestUtilityCoverage:
     def test_create_file_path_field_with_absolute_path(self) -> None:
         """Test create_file_path_field with absolute path - covers utility.py lines 20-23."""
         # This exercises the build_path call and field creation in lines 20-23
-        absolute_path = "/absolute/path/config.yml"
+        absolute_path = str(Path("/absolute/path/config.yml"))
         field_instance = create_file_path_field(absolute_path, path_is_absolute=True)
 
         # Verify field was created correctly

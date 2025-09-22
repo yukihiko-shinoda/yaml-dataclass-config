@@ -7,7 +7,6 @@ from dataclasses import dataclass
 from dataclasses import field
 from typing import TYPE_CHECKING
 from typing import Any
-from typing import Self
 from typing import cast
 from typing import get_type_hints
 
@@ -23,6 +22,7 @@ from yamldataclassconfig.validation import validate_config_if_needed
 
 if TYPE_CHECKING:
     from pathlib import Path
+    from typing import Self
 
 __all__ = [
     "YamlDataClassConfig",
@@ -40,7 +40,8 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     _loaded: bool = field(default=False, init=False)
 
     @classmethod
-    def create(cls, **kwargs: Any) -> Self:  # noqa: ANN401
+    # UP037: To support Python 3.10 or lower
+    def create(cls, **kwargs: Any) -> "Self":  # noqa: ANN401,UP037
         """Create an instance without requiring all fields.
 
         This is a factory method that allows instantiation of config classes

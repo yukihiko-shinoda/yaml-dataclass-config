@@ -23,10 +23,13 @@ collect_ignore = ["setup.py"]
 @pytest.fixture
 def temporary_yaml_file(content: str) -> Generator[Path, None, None]:
     """Create a temporary YAML file that gets cleaned up automatically."""
-    with tempfile.NamedTemporaryFile(mode="w", suffix=".yml") as file:
-        file.write(content)
-        file.flush()
-        yield Path(file.name)
+    # NamedTemporaryFile causes PermissionError in Windows:
+    # - Windows environment: When reopening a file created with `NamedTemporaryFile`, a `PermissionError` occurs #Python - Qiita
+    #   https://qiita.com/yuji38kwmt/items/c6f50e1fc03dafdcdda0
+    with tempfile.TemporaryDirectory() as str_temp_dir:
+        path = Path(str_temp_dir) / "temp.yml"
+        path.write_text(content)
+        yield path
 
 
 @dataclass
