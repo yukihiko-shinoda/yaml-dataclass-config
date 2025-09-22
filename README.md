@@ -12,6 +12,10 @@
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).
 
+## 📖 Migration Guide
+
+Upgrading from version 1.x? See the [Migration Guide](docs/migration-1-to-2.md) for step-by-step instructions to migrate to version 2.x.
+
 ## Advantage
 
 1. Type safe import from YAML to Data Classes
