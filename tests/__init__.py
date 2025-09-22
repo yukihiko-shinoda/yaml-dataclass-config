@@ -1,4 +1,5 @@
 """Test package."""
+
 import os
 from pathlib import Path
 

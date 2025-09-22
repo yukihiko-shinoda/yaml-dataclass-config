@@ -1,3 +1,3 @@
 from myproduct.config import Config
 
-CONFIG: Config = Config()
+CONFIG: Config = Config.create()

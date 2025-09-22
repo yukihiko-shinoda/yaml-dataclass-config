@@ -2,53 +2,66 @@ name: Test
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 jobs:
   test:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest]
-        python-version: [ '3.8', '3.7' ]
+        python-version: [ '3.13', '3.12', '3.11', '3.10', '3.9', '3.8' ]
       fail-fast: false
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
         with:
           python-version: ${{ matrix.python-version }}
-      - run: python -m pip install pipenv
-      - run: python -m pipenv install --python ${{ matrix.python-version }} --skip-lock --dev
-      - run: python -m pipenv run invoke test
+      - run: uv sync
+      - run: uv run invoke test.all
+  test_legacy_linux:
+    # "It mostly works, especially on Linux and macOS, but it’s not officially supported.":
+    # - uv tool run is giving "SyntaxError: Non-UTF-8 code starting with '\xe8' in file..." · Issue #12122 · astral-sh/uv
+    #   https://github.com/astral-sh/uv/issues/12122#issuecomment-2761278707
+    runs-on: ubuntu-22.04
+    strategy:
+      matrix:
+        python-version: [ '3.7' ]
+      fail-fast: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: python -m pip install --ignore-requires-python uv
+      - run: uv sync
+      - run: uv run invoke test.all
   check_style:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.8'
-      - run: python -m pip install pipenv
-      - run: python -m pipenv install --skip-lock --dev
-      - run: python -m pipenv run invoke style --check
+          python-version: '3.13'
+      - run: uv sync
+      - run: uv run invoke style --check
   check_lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.8'
-      - run: python -m pip install pipenv
-      - run: python -m pipenv install --skip-lock --dev
-      - run: python -m pipenv run invoke lint
-  check_complexity:
+          python-version: '3.13'
+      - run: uv sync
+      - run: uv run invoke lint
+  check_lint_deep:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
         with:
-          python-version: '3.8'
-      - run: python -m pip install pipenv
-      - run: python -m pipenv install --skip-lock --dev
-      - run: python -m pipenv run invoke xenon
+          python-version: '3.13'
+      - run: uv sync
+      - run: uv run invoke lint.deep

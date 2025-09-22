@@ -1,0 +1,7 @@
+services:
+  yaml-dataclass-config:
+    build: .
+    image: futureys/yaml-dataclass-config:latest
+    volumes:
+      - .:/workspace:cached
+      - /workspace/.venv

@@ -1,16 +1,20 @@
 # YAML Data Class Config
 
 [![Test](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ATest)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/test_coverage)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/9b89a5c842c2af41d02e/maintainability)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config/maintainability)
-[![Code Climate technical debt](https://img.shields.io/codeclimate/tech-debt/yukihiko-shinoda/yaml-dataclass-config)](https://codeclimate.com/github/yukihiko-shinoda/yaml-dataclass-config)
-[![Updates](https://pyup.io/repos/github/yukihiko-shinoda/yaml-dataclass-config/shield.svg)](https://pyup.io/repos/github/yukihiko-shinoda/yaml-dataclass-config/)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
+[![CodeQL](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ACodeQL)
+[![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
+[![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
+[![Dependabot](https://flat.badgen.net/github/dependabot/yukihiko-shinoda/yaml-dataclass-config?icon=dependabot)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/security/dependabot)
+[![Python versions](https://img.shields.io/pypi/pyversions/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
 [![PyPI - Downloads](https://img.shields.io/pypi/dm/yamldataclassconfig)](https://pypi.org/project/yamldataclassconfig/)
-[![Twitter URL](https://img.shields.io/twitter/url?url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](http://twitter.com/share?text=YAML%20Data%20Class%20Config&url=https://pypi.org/project/yamldataclassconfig/&hashtags=python)
+[![X URL](https://img.shields.io/twitter/url?style=social&url=https%3A%2F%2Fgithub.com%2Fyukihiko-shinoda%2Fyaml-dataclass-config)](https://x.com/intent/post?text=YAML%20Data%20Class%20Config&url=https%3A%2F%2Fpypi.org%2Fproject%2Fyamldataclassconfig%2F&hashtags=python)
 
 This project helps you to import config file writen by YAML to
 Python [Data Classes](https://docs.python.org/3/library/dataclasses.html).
+
+## 📖 Migration Guide
+
+Upgrading from version 1.x? See the [Migration Guide](docs/migration-1-to-2.md) for step-by-step instructions to migrate to version 2.x.
 
 ## Advantage
 
@@ -41,6 +45,16 @@ you can't replace config YAML file with the one for unit testing.
 YAML Data Class Config can divide timings between definition global instance and
 loading YAML file so you can replace YAML file for unit testing.
 
+## Modern Python Features
+
+This library leverages modern Python features for better type safety and developer experience:
+
+- **Modern Union Syntax**: Uses `str | None` instead of `Union[str, None]` (Python 3.10+)
+- **Future Annotations**: Uses `from __future__ import annotations` for improved type hint evaluation
+- **Keyword-Only Arguments**: Functions use `*` to enforce keyword-only arguments for better API clarity
+- **Type Safety**: Full mypy compliance with strict mode enabled
+- **Runtime Type Checking**: Proper handling of type annotations at runtime for dataclass serialization
+
 ## Quickstart
 
 ### 1. Install
@@ -66,29 +80,35 @@ part_config:
 Anywhere is OK, for example, I prefer to place on `myproduct/config.py`
 
 ```python
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from dataclasses import field
 from datetime import datetime
+
 from dataclasses_json import DataClassJsonMixin
 from marshmallow import fields
+
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
 @dataclass
 class PartConfig(DataClassJsonMixin):
-    property_c: datetime = field(metadata={'dataclasses_json': {
-        'encoder': datetime.isoformat,
-        'decoder': datetime.fromisoformat,
-        'mm_field': fields.DateTime(format='iso')
-    }})
+    property_c: datetime = field(
+        metadata={
+            "dataclasses_json": {
+                "encoder": datetime.isoformat,
+                "decoder": datetime.fromisoformat,
+                "mm_field": fields.DateTime(format="iso"),
+            },
+        },
+    )
 
 
 @dataclass
 class Config(YamlDataClassConfig):
-    property_a: int = None
-    property_b: str = None
+    property_a: int
+    property_b: str
     part_config: PartConfig = field(
-        default=None,
-        metadata={'dataclasses_json': {'mm_field': PartConfig}}
+        metadata={"dataclasses_json": {"mm_field": PartConfig}},
     )
 ```
 
@@ -108,11 +128,12 @@ CONFIG: Config = Config()
 from myproduct import CONFIG
 
 
-def main():
+def main() -> None:
     CONFIG.load()
     print(CONFIG.property_a)
     print(CONFIG.property_b)
-    print(CONFIG.part_config.property_c)
+    if CONFIG.part_config is not None:
+        print(CONFIG.part_config.property_c)
 
 
 if __name__ == '__main__':
@@ -133,18 +154,22 @@ Ex:
 
 ```python
 from dataclasses import dataclass
+from dataclasses import field
 from pathlib import Path
 
-from yamldataclassconfig import create_file_path_field
+from yamldataclassconfig import build_path
 from yamldataclassconfig.config import YamlDataClassConfig
 
 
 @dataclass
 class Config(YamlDataClassConfig):
-    some_property: str = None
+    some_property: str
     # ...
 
-    FILE_PATH: Path = create_file_path_field(Path(__file__).parent.parent / 'config.yml')
+    FILE_PATH: str = field(
+        init=False,
+        default=build_path(Path(__file__).parent / "config.yml"),
+    )
 ```
 
 <!-- markdownlint-disable no-trailing-punctuation -->
@@ -152,6 +177,8 @@ class Config(YamlDataClassConfig):
 <!-- markdownlint-enable no-trailing-punctuation -->
 
 When setup on unit testing, you can call `Config.load()` with argument.
+
+**Note**: The `path_is_absolute` parameter must now be passed as a keyword argument due to API improvements in version 1.5.0.
 
 Case when unittest:
 
@@ -162,7 +189,7 @@ import unittest
 from yourproduct import CONFIG
 
 class ConfigurableTestCase(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         CONFIG.load(Path('path/to/yaml'))
 ```
 
@@ -170,16 +197,18 @@ Case when pytest:
 
 ```python
 from pathlib import Path
+from typing import Generator
+
 import pytest
 
 from yourproduct import CONFIG
 
 @pytest.fixture
-def yaml_config():
+def yaml_config() -> Generator[None, None, None]:
     CONFIG.load(Path('path/to/yaml'))
     yield
 
-def test_something(yaml_config):
+def test_something(yaml_config: None) -> None:
     """test something"""
 ```
 
@@ -198,6 +227,7 @@ Case when unittest:
 ```python
 from pathlib import Path
 import unittest
+
 from fixturefilehandler.factories import DeployerFactory
 from fixturefilehandler.file_paths import YamlConfigFilePathBuilder
 
@@ -208,11 +238,11 @@ ConfigDeployer = DeployerFactory.create(YamlConfigFilePathBuilder(path_target_di
 
 
 class ConfigurableTestCase(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         ConfigDeployer.setup()
         CONFIG.load()
 
-    def doCleanups(self):
+    def doCleanups(self) -> None:
         ConfigDeployer.teardown()
 ```
 
@@ -220,6 +250,8 @@ Case when pytest:
 
 ```python
 from pathlib import Path
+from typing import Generator
+
 import pytest
 from fixturefilehandler.factories import DeployerFactory
 from fixturefilehandler.file_paths import YamlConfigFilePathBuilder
@@ -231,13 +263,13 @@ ConfigDeployer = DeployerFactory.create(YamlConfigFilePathBuilder(path_target_di
 
 
 @pytest.fixture
-def yaml_config():
+def yaml_config() -> Generator[None, None, None]:
     ConfigDeployer.setup()
     CONFIG.load()
     yield
     ConfigDeployer.teardown()
 
 
-def test_something(yaml_config):
+def test_something(yaml_config: None) -> None:
     """test something"""
 ```

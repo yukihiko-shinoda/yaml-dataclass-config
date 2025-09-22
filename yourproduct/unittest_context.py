@@ -10,9 +10,9 @@ ConfigDeployer = DeployerFactory.create(YamlConfigFilePathBuilder(path_target_di
 
 
 class ConfigurableTestCase(unittest.TestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         ConfigDeployer.setup()
         CONFIG.load()
 
-    def doCleanups(self):
+    def doCleanups(self) -> None:
         ConfigDeployer.teardown()
