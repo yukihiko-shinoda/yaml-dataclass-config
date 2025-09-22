@@ -6,6 +6,7 @@ import contextlib
 import dataclasses
 from typing import Any
 from typing import Optional
+from typing import Type
 from typing import Union
 
 from yamldataclassconfig.exceptions import ConfigValidationError
@@ -20,10 +21,12 @@ with contextlib.suppress(ModuleNotFoundError):
 class ExpectedType:
     """Represents the expected type of a YAML field."""
 
-    def __init__(self, expected_type: type) -> None:
+    # Reason: Ruff's bug
+    def __init__(self, expected_type: Type[Any]) -> None:  # noqa: UP006
         self.expected_type = expected_type
 
-    def get_actual(self) -> type:
+    # Reason: Ruff's bug
+    def get_actual(self) -> Type[Any]:  # noqa: UP006
         """Get the actual expected type, handling nullable types."""
         if not is_nullable_type(self.expected_type):
             return self.expected_type
@@ -47,7 +50,7 @@ class ExpectedType:
 
     @staticmethod
     # Reason: Ruff's bug
-    def get_single_non_none_type(args: Union[tuple[Any, ...], list[Any]], fallback_type: type) -> type:  # noqa: UP007
+    def get_single_non_none_type(args: Union[tuple[Any, ...], list[Any]], fallback_type: Type[Any]) -> Type[Any]:  # noqa: UP006,UP007
         """Extract single non-None type from args, return fallback if not exactly one."""
         non_none_types = [arg for arg in args if arg is not type(None)]
         if len(non_none_types) == 1:

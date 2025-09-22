@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 from typing import Any
+from typing import Type
 
 __all__ = [
     "get_default_for_type",
 ]
 
 
-def get_default_for_type(field_type: type) -> Any:  # noqa: ANN401
+# UP006: Ruff's bug
+def get_default_for_type(field_type: Type[Any]) -> Any:  # noqa: ANN401,UP006
     """Get appropriate default value for a field type.
 
     Returns None if no appropriate default can be determined, or a callable for mutable types (to be used with

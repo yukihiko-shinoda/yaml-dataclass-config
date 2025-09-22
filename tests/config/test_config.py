@@ -7,6 +7,7 @@ from dataclasses import field
 from datetime import datetime
 from typing import TYPE_CHECKING
 from typing import Optional
+from typing import Type
 from typing import Union
 
 import pytest
@@ -95,7 +96,8 @@ class DataClassConfigFail(YamlDataClassConfig):
 
     def test_config_success_specify_absolute_file_path_property(
         self,
-        dataclass_config_success_specify_absolute_file_path: type[DataClassConfigB],
+        # Reason: Ruff's bug
+        dataclass_config_success_specify_absolute_file_path: Type[DataClassConfigB],  # noqa: UP006
     ) -> None:
         """Specified YAML file by absolute path should be loaded."""
         config = dataclass_config_success_specify_absolute_file_path()

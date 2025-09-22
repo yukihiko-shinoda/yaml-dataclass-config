@@ -5,13 +5,15 @@ from __future__ import annotations
 import dataclasses
 from typing import Any
 from typing import Generic
+from typing import Type
 from typing import TypeVar
 from typing import get_type_hints
 
 T = TypeVar("T")
 
 
-def _get_type_default(field_type: type) -> Any:  # noqa: ANN401
+# UP006: Ruff's bug
+def _get_type_default(field_type: Type[Any]) -> Any:  # noqa: ANN401,UP006
     """Get default value for a field type."""
     # Handle basic types
     type_defaults = {
@@ -40,7 +42,8 @@ def _get_type_default(field_type: type) -> Any:  # noqa: ANN401
 class KeyArguments(Generic[T]):
     """Class to hold keyword arguments for config creation."""
 
-    def __init__(self, cls: type[T], **kwargs: Any) -> None:  # noqa: ANN401
+    # UP006: Ruff's bug
+    def __init__(self, cls: Type[T], **kwargs: Any) -> None:  # noqa: ANN401,UP006
         self.init_kwargs: dict[str, Any] = {}
         self.cls = cls
         self.type_hints = get_type_hints(self.cls)

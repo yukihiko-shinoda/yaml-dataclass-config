@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 from typing import Generator
 from typing import Optional
+from typing import Type
 
 import pytest
 from dataclasses_json import DataClassJsonMixin
@@ -130,9 +131,8 @@ class DataClassConfigB(YamlDataClassConfig):
 
 
 @pytest.fixture
-def dataclass_config_success_specify_absolute_file_path(
-    resource_path_root: Path,
-) -> type[DataClassConfigB]:
+# Reason: Ruff's bug
+def dataclass_config_success_specify_absolute_file_path(resource_path_root: Path) -> Type[DataClassConfigB]:  # noqa: UP006
     """Fixture for absolute file path."""
 
     @dataclass
@@ -151,7 +151,8 @@ def dataclass_config_success_specify_absolute_file_path(
 
 
 @pytest.fixture
-def dataclass_config_success_specify_file_path(resource_path_root: Path) -> type[DataClassConfigA]:
+# Reason: Ruff's bug
+def dataclass_config_success_specify_file_path(resource_path_root: Path) -> Type[DataClassConfigA]:  # noqa: UP006
     """Fixture for file path."""
 
     @dataclass
