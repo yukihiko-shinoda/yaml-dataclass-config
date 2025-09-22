@@ -10,7 +10,7 @@ from yamldataclassconfig.nullable import *  # noqa: F403
 from yamldataclassconfig.type_defaults import *  # noqa: F403
 from yamldataclassconfig.utility import *  # noqa: F403
 
-__version__ = "1.5.0"
+__version__ = "2.0.0"
 
 # Reason: Ruff's bug
 __all__: List[str] = []  # noqa: UP006
