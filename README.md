@@ -119,7 +119,7 @@ Also, anywhere is OK, for example, I prefer to place on `myproduct/__init__.py`
 ```python
 from myproduct.config import Config
 
-CONFIG: Config = Config()
+CONFIG: Config = Config.create()
 ```
 
 ### 5. Call load before reference config value
