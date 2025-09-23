@@ -93,7 +93,8 @@ class PartConfigA(DataClassJsonMixin):
     property_b: str
 
 
-def create_metadata_dataclasses_json_datetime() -> dict[str, Any]:
+# Reason: Ruff's bug
+def create_metadata_dataclasses_json_datetime() -> Dict[str, Any]:  # noqa: UP006
     """Create metadata for datetime fields."""
     return {
         "dataclasses_json": {

@@ -52,6 +52,10 @@ class DataClassConfigFail(YamlDataClassConfig):
         metadata={"dataclasses_json": {"mm_field": PartConfigA}},
     )
 
+
+class TestYamlDataClassConfig:
+    """Tests for YamlDataClassConfig."""
+
     @staticmethod
     def test_config_success() -> None:
         """Int should be int.
@@ -84,7 +88,7 @@ class DataClassConfigFail(YamlDataClassConfig):
     @staticmethod
     def assert_that_config_a_is_loaded(config: DataClassConfigA) -> None:
         # pylint: disable=no-member
-        DataClassConfigFail.check_part_config_a(config)
+        TestYamlDataClassConfig.check_part_config_a(config, PartConfigA(property_a=1, property_b="2"))
         assert config.part_config_b is not None
         assert config.part_config_b.property_c == datetime(2019, 6, 25, 13, 33, 30)  # noqa: DTZ001
 
@@ -92,7 +96,13 @@ class DataClassConfigFail(YamlDataClassConfig):
         """Specified YAML file by absolute path should be loaded."""
         config = DataClassConfigB()
         config.load(resource_path_root / "config_b.yml", path_is_absolute=True)
-        self.assert_that_config_b_is_loaded(config)
+        self.assert_that_config_b_is_loaded(config, PartConfigA(property_a=1, property_b="2"))
+
+    def test_config_lack(self, resource_path_root: Path) -> None:
+        """Specified YAML file by absolute path should be loaded."""
+        config = DataClassConfigB()
+        config.load(resource_path_root / "config_c.yml", path_is_absolute=True)
+        self.assert_that_config_b_is_loaded(config, None)
 
     def test_config_success_specify_absolute_file_path_property(
         self,
@@ -102,22 +112,34 @@ class DataClassConfigFail(YamlDataClassConfig):
         """Specified YAML file by absolute path should be loaded."""
         config = dataclass_config_success_specify_absolute_file_path()
         config.load()
-        self.assert_that_config_b_is_loaded(config)
+        self.assert_that_config_b_is_loaded(config, PartConfigA(property_a=1, property_b="2"))
 
-    @staticmethod
-    def assert_that_config_b_is_loaded(config: DataClassConfigB) -> None:
-        # pylint: disable=no-member
-        DataClassConfigFail.check_part_config_a(config)
+    @classmethod
+    def assert_that_config_b_is_loaded(
+        cls,
+        config: DataClassConfigB,
+        # Reason: Ruff's bug
+        expected_part_config_a: Optional[PartConfigA],  # noqa: UP045
+    ) -> None:
+        """Assert that config B is loaded with expected values."""
+        if expected_part_config_a is None:
+            assert config.part_config_a is None
+        else:
+            cls.check_part_config_a(config, expected_part_config_a)
         expected_property_c = 3
         assert config.property_c == expected_property_c
         assert config.property_d == "4"
 
     @staticmethod
-    # Reason: Ruff's bug
-    def check_part_config_a(config: Union[DataClassConfigA, DataClassConfigB]) -> None:  # noqa: UP007
+    def check_part_config_a(
+        # Reason: Ruff's bug
+        config: Union[DataClassConfigA, DataClassConfigB],  # noqa: UP007
+        expected_part_config_a: PartConfigA,
+    ) -> None:
+        """Check that part_config_a matches expected values."""
         assert config.part_config_a is not None
-        assert config.part_config_a.property_a == 1
-        assert config.part_config_a.property_b == "2"
+        assert config.part_config_a.property_a == expected_part_config_a.property_a
+        assert config.part_config_a.property_b == expected_part_config_a.property_b
 
     @staticmethod
     def test_config_fail() -> None:

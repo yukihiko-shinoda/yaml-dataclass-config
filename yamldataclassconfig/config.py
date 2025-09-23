@@ -17,6 +17,7 @@ import yaml
 from dataclasses_json import DataClassJsonMixin
 
 from yamldataclassconfig.config_property import create_property_descriptors
+from yamldataclassconfig.config_property import set_deserialization_context
 from yamldataclassconfig.factory import KeyArguments
 from yamldataclassconfig.field_processor import apply_automatic_defaults
 from yamldataclassconfig.utility import build_path
@@ -41,6 +42,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # pylint: disable=invalid-name
     FILE_PATH: str = field(default=build_path("config.yml"), init=False)
     _loaded: bool = field(default=False, init=False)
+    _needs_property_descriptors: bool = field(default=False, init=False)
 
     @classmethod
     # UP037: To support Python 3.10 or lower
@@ -67,8 +69,9 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         # Automatically apply defaults to prevent mypy positional argument warnings
         apply_automatic_defaults(cls)
 
-        # Add property descriptors for validation
-        create_property_descriptors(cls)
+        # Mark that this class needs property descriptors but don't install them yet
+        # This avoids conflicts with @dataclass decorator field processing
+        cls._needs_property_descriptors = True
 
     # Reason: Ruff's bug
     def load(self, path: Optional[Union[Path, str]] = None, *, path_is_absolute: bool = False) -> None:  # noqa: UP007,UP045
@@ -78,6 +81,12 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         1. Access config as global
         2. Independent on config for development or use config for unit testing when unit testing
         """
+        # Install property descriptors on first load if not already done
+        # This avoids conflicts with @dataclass decorator processing
+        if getattr(self.__class__, "_needs_property_descriptors", False):
+            create_property_descriptors(self.__class__)
+            self.__class__._needs_property_descriptors = False  # noqa: SLF001  # pylint: disable=protected-access
+
         config_path = self._resolve_config_path(path, path_is_absolute=path_is_absolute)
         dictionary_config = self._load_yaml_content(config_path)
 
@@ -85,6 +94,26 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
         validate_config_if_needed(dictionary_config, type_hints)
 
         self._load_and_apply_config(dictionary_config)
+
+    def __getattribute__(self, name: str) -> Any:  # noqa: ANN401
+        """Handle property access before descriptors are installed."""
+        # For regular attributes, use normal access
+        if name.startswith("_") or name in {
+            "load",
+            "create",
+            "FILE_PATH",
+            "__class__",
+            "__dict__",
+            "__init_subclass__",
+        }:
+            return super().__getattribute__(name)
+
+        # Install descriptors on first property access if needed
+        if getattr(self.__class__, "_needs_property_descriptors", False):
+            create_property_descriptors(self.__class__)
+            self.__class__._needs_property_descriptors = False  # noqa: SLF001  # pylint: disable=protected-access
+
+        return super().__getattribute__(name)
 
     # Reason: Ruff's bug
     def _resolve_config_path(self, path: Optional[Union[Path, str]], *, path_is_absolute: bool) -> Path:  # noqa: UP007,UP045
@@ -101,7 +130,13 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # Reason: Ruff's bug
     def _load_and_apply_config(self, dictionary_config: Dict[str, Any]) -> None:  # noqa: UP006
         """Load configuration using marshmallow and apply to instance."""
-        loaded_config = self.__class__.schema().load(dictionary_config)
+        # Set deserialization context to allow property descriptors to return defaults
+        set_deserialization_context(value=True)
+        try:
+            loaded_config = self.__class__.schema().load(dictionary_config)
+        finally:
+            # Always reset the context, even if an exception occurs
+            set_deserialization_context(value=False)
 
         # Set loaded flag first to prevent ConfigNotLoadedError during property access
         self._loaded = True
