@@ -5,6 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from dataclasses import field
 from typing import Any
+from typing import List
 
 import pytest
 from marshmallow import ValidationError
@@ -23,7 +24,8 @@ class ConfigWithDefaultFactory(YamlDataClassConfig):
     """Config class with default_factory field for testing."""
 
     name: str
-    items: list[str] = field(default_factory=list)
+    # Reason: Ruff's bug
+    items: List[str] = field(default_factory=list)  # noqa: UP006
 
 
 @dataclass
