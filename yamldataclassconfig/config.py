@@ -41,9 +41,21 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
     # Reason: pylint bug.
     # @see https://github.com/PyCQA/pylint/issues/2698
     # pylint: disable=invalid-name
-    FILE_PATH: str = field(default=build_path("config.yml"), init=False, metadata={"mm_field": fields.String()})
-    _loaded: bool = field(default=False, init=False, metadata={"mm_field": fields.Boolean()})
-    _needs_property_descriptors: bool = field(default=False, init=False, metadata={"mm_field": fields.Boolean()})
+    FILE_PATH: str = field(
+        default=build_path("config.yml"),
+        init=False,
+        metadata={"dataclasses_json": {"mm_field": fields.String()}},
+    )
+    _loaded: bool = field(
+        default=False,
+        init=False,
+        metadata={"dataclasses_json": {"mm_field": fields.Boolean()}},
+    )
+    _needs_property_descriptors: bool = field(
+        default=False,
+        init=False,
+        metadata={"dataclasses_json": {"mm_field": fields.Boolean()}},
+    )
 
     @classmethod
     # UP037: To support Python 3.10 or lower
