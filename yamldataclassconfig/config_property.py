@@ -4,14 +4,41 @@ from __future__ import annotations
 
 import threading
 from dataclasses import MISSING
+from dataclasses import Field
 from dataclasses import fields
 from typing import Any
 from typing import Optional
+from typing import Type
 
 from yamldataclassconfig.exceptions import ConfigNotLoadedError
 
 # Thread-local storage for deserialization context
 _local = threading.local()
+
+
+class DataclassType:
+    """Helper class for accessing dataclass field defaults during deserialization."""
+
+    # Reason: Ruff's bug.
+    def __init__(self, cls: Type[Any]) -> None:  # noqa: UP006
+        self.cls = cls
+
+    def get_field_default(self, field_name: str) -> Any:  # noqa: ANN401
+        """Get the default value for this field from the dataclass definition."""
+        for field in (field for field in fields(self.cls) if field.name == field_name):
+            return self._get_field_default(field, field_name)
+        # Field not found (shouldn't happen), raise the original error
+        msg = f"Configuration must be loaded before accessing '{field_name}'. Call load() first."
+        raise ConfigNotLoadedError(msg)
+
+    def _get_field_default(self, field: Field[Any], field_name: str) -> Any:  # noqa: ANN401
+        if field.default is not MISSING:
+            return field.default
+        if field.default_factory is not MISSING:
+            return field.default_factory()
+        # Field has no default, raise the original error
+        msg = f"Configuration must be loaded before accessing '{field_name}'. Call load() first."
+        raise ConfigNotLoadedError(msg)
 
 
 class ConfigProperty:
@@ -27,15 +54,13 @@ class ConfigProperty:
         if obj is None:
             # When accessed on the class (not an instance), return the original default
             # This happens during schema generation
-            if self.original_default is not MISSING:
-                return self.original_default
-            return self
+            return self if self.original_default is MISSING else self.original_default
 
         if not getattr(obj, "_loaded", False):
             # Check if we're in deserialization context
             if getattr(_local, "in_deserialization", False):
                 # During deserialization, return field defaults to allow dataclasses-json to work
-                return self._get_field_default(obj.__class__)
+                return DataclassType(obj.__class__).get_field_default(self.name)
             # Normal access before load should raise error
             msg = f"Configuration must be loaded before accessing '{self.name}'. Call load() first."
             raise ConfigNotLoadedError(msg)
@@ -44,22 +69,6 @@ class ConfigProperty:
 
     def __set__(self, obj: Any, value: Any) -> None:  # noqa: ANN401
         setattr(obj, self.private_name, value)
-
-    def _get_field_default(self, cls: type) -> Any:  # noqa: ANN401
-        """Get the default value for this field from the dataclass definition."""
-        for field in fields(cls):
-            if field.name == self.name:
-                if field.default is not MISSING:
-                    return field.default
-                if field.default_factory is not MISSING:
-                    return field.default_factory()
-                # Field has no default, raise the original error
-                msg = f"Configuration must be loaded before accessing '{self.name}'. Call load() first."
-                raise ConfigNotLoadedError(msg)
-
-        # Field not found (shouldn't happen), raise the original error
-        msg = f"Configuration must be loaded before accessing '{self.name}'. Call load() first."
-        raise ConfigNotLoadedError(msg)
 
 
 def set_deserialization_context(*, value: bool) -> None:

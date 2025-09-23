@@ -15,7 +15,7 @@ from yamldataclassconfig.exceptions import ConfigNotLoadedError
 
 
 @dataclass
-class TestConfig:
+class ConfigExample:
     """Test config class for config_property testing."""
 
     name: str
@@ -82,7 +82,7 @@ class TestCreatePropertyDescriptors:
     def test_create_property_descriptors(self) -> None:
         """Test create_property_descriptors creates descriptors for all fields."""
         # Apply the descriptors to the class
-        create_property_descriptors(TestConfig)
+        create_property_descriptors(ConfigExample)
 
         # Check that descriptors were created
         self.check_name("name")
@@ -91,6 +91,6 @@ class TestCreatePropertyDescriptors:
     @staticmethod
     def check_name(attr_name: str) -> None:
         """Check that the attribute name is correct."""
-        assert hasattr(TestConfig, attr_name)
-        assert isinstance(getattr(TestConfig, attr_name), ConfigProperty)
-        assert getattr(TestConfig, attr_name).name == attr_name
+        assert hasattr(ConfigExample, attr_name)
+        assert isinstance(getattr(ConfigExample, attr_name), ConfigProperty)
+        assert getattr(ConfigExample, attr_name).name == attr_name

@@ -121,7 +121,11 @@ class TestYamlDataClassConfig:
         # Reason: Ruff's bug
         expected_part_config_a: Optional[PartConfigA],  # noqa: UP045
     ) -> None:
-        cls.check_part_config_a(config, expected_part_config_a)
+        """Assert that config B is loaded with expected values."""
+        if expected_part_config_a is None:
+            assert config.part_config_a is None
+        else:
+            cls.check_part_config_a(config, expected_part_config_a)
         expected_property_c = 3
         assert config.property_c == expected_property_c
         assert config.property_d == "4"
@@ -130,11 +134,9 @@ class TestYamlDataClassConfig:
     def check_part_config_a(
         # Reason: Ruff's bug
         config: Union[DataClassConfigA, DataClassConfigB],  # noqa: UP007
-        expected_part_config_a: Optional[PartConfigA],  # noqa: UP045
+        expected_part_config_a: PartConfigA,
     ) -> None:
-        if expected_part_config_a is None:
-            assert config.part_config_a is None
-            return
+        """Check that part_config_a matches expected values."""
         assert config.part_config_a is not None
         assert config.part_config_a.property_a == expected_part_config_a.property_a
         assert config.part_config_a.property_b == expected_part_config_a.property_b
