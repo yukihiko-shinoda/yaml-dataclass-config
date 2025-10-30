@@ -3,15 +3,7 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-      - uses: astral-sh/setup-uv@v7
-        with:
-          python-version: '3.13'
-      - run: uv sync
-      - run: uv run invoke dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: ${{ secrets.PYPI_PASSWORD }}
+  call-workflow:
+    uses: ./.github/workflows/reusable-deploy.yml
+    secrets:
+      pypi_password: ${{ secrets.PYPI_PASSWORD }}
