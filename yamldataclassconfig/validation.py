@@ -55,7 +55,8 @@ class ExpectedType:
     # Reason: Ruff's bug
     def get_single_non_none_type(args: Union[Tuple[Any, ...], List[Any]], fallback_type: Type[Any]) -> Type[Any]:  # noqa: UP006,UP007
         """Extract single non-None type from args, return fallback if not exactly one."""
-        non_none_types = [arg for arg in args if arg is not type(None)]
+        none_type = type(None)
+        non_none_types = [arg for arg in args if arg is not none_type]
         if len(non_none_types) == 1:
             return non_none_types[0]  # type: ignore[no-any-return]
         return fallback_type
