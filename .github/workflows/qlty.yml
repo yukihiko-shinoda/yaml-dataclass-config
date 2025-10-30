@@ -1,0 +1,10 @@
+on:
+  push:
+    branches:
+      - main
+jobs:
+  call-workflow:
+    permissions:
+      contents: read
+      id-token: write
+    uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-qlty.yml@main
