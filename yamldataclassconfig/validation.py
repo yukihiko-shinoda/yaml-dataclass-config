@@ -12,6 +12,15 @@ from typing import Tuple
 from typing import Type
 from typing import Union
 
+try:
+    from typing import get_origin
+except ImportError:  # pragma nocover
+
+    def get_origin(type_: Any) -> Any:  # type: ignore[no-redef]  # noqa: ANN401
+        """Backport helper for Python versions without typing.get_origin."""
+        return getattr(type_, "__origin__", None)
+
+
 from yamldataclassconfig.exceptions import ConfigValidationError
 from yamldataclassconfig.nullable import is_nullable_type
 
@@ -32,16 +41,25 @@ class ExpectedType:
     def get_actual(self) -> Type[Any]:  # noqa: UP006
         """Get the actual expected type, handling nullable types."""
         if not is_nullable_type(self.expected_type):
-            return self.expected_type
+            return self._strip_parameterized_generic(self.expected_type)
         # Guard clause: Check if the type has __args__ attribute using type narrowing
         if not hasattr(self.expected_type, "__args__"):
-            return self.expected_type
+            return self._strip_parameterized_generic(self.expected_type)
 
         args = self._get_type_args()
         if args is None:
-            return self.expected_type
+            return self._strip_parameterized_generic(self.expected_type)
 
-        return self.get_single_non_none_type(args, self.expected_type)
+        result = self.get_single_non_none_type(args, self.expected_type)
+        return self._strip_parameterized_generic(result)
+
+    @staticmethod
+    def _strip_parameterized_generic(type_: Type[Any]) -> Type[Any]:  # noqa: UP006
+        """Convert parameterized generic aliases like list[str] to list."""
+        origin = get_origin(type_)
+        if origin is not None:
+            return origin  # type: ignore[no-any-return]
+        return type_
 
     # Reason: Ruff's bug
     def _get_type_args(self) -> Optional[Union[Tuple[Any, ...], List[Any]]]:  # noqa: UP006,UP007,UP045
