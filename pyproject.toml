@@ -45,7 +45,7 @@ dev = [
     "pytest",
     "pytest-resource-path",
     "pyvelocity; python_version >= '3.9'",
-    "radon<6.0.0",
+    "radon<7.0.0",
     "ruff",
     "semgrep; python_version>='3.9' or platform_system=='Linux'",
     "types-invoke",
