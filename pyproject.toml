@@ -204,6 +204,16 @@ show_mi = true
 line-length = 119
 
 [tool.ruff.lint]
+# Avoiding flagging (and removing) any codes starting with `H` from any
+# `# noqa` directives, despite Ruff's lack of support for `hacking`.
+# - Long import statement violates flake8: H301: one import per line · Issue #1220 · psf/black
+#   https://github.com/psf/black/issues/1220#issuecomment-570970250
+# - Bug #2123810 “H301 with long line” : Bugs : hacking
+#   https://bugs.launchpad.net/hacking/+bug/2123810
+external = [
+    "DUO",  # dlint
+    "H",    # Openstack/hacking
+]
 select = ["ALL"]
 ignore = [
     # lint.pydocstyle

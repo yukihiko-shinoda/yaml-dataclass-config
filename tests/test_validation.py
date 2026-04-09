@@ -53,11 +53,11 @@ class TestExpectedType:
         assert expected_type.get_actual() == fake_type  # type: ignore[comparison-overlap]
 
     def test_get_actual_non_nullable_type_with_args(self) -> None:
-        """Test get_actual with non-nullable type that has __args__ - covers line 27."""
-        # Using list[str] which has __args__ but is not nullable
+        """Test get_actual with non-nullable parameterized type strips params for isinstance compatibility."""
+        # List[str] has __args__ but is not nullable — origin (list) should be returned
         expected_type = ExpectedType(List[str])
         result = expected_type.get_actual()
-        assert result == List[str]  # Should return type as-is since it's not nullable
+        assert result is list
 
     def test_get_actual_nullable_type_without_args(self) -> None:
         """Test get_actual with nullable type that somehow has no __args__ - covers line 27."""
@@ -119,9 +119,46 @@ class TestExpectedType:
         result = ExpectedType.get_single_non_none_type(args, fallback)
         assert result == fallback
 
+    def test_get_actual_typing_list_str(self) -> None:
+        """Test get_actual strips params from typing.List[str]."""
+        expected_type = ExpectedType(List[str])
+        assert expected_type.get_actual() is list
+
+    @pytest.mark.skipif(sys.version_info < (3, 9), reason="Native parameterized generics require Python 3.9+")
+    def test_get_actual_native_generic_list_str(self) -> None:
+        """Test get_actual strips params from native list[str] generic."""
+        expected_type = ExpectedType(list[str])
+        assert expected_type.get_actual() is list
+
+    @pytest.mark.skipif(sys.version_info < (3, 9), reason="Native parameterized generics require Python 3.9+")
+    def test_get_actual_native_generic_dict(self) -> None:
+        """Test get_actual strips params from native dict[str, int] generic."""
+        expected_type = ExpectedType(dict[str, int])
+        assert expected_type.get_actual() is dict
+
+    @pytest.mark.skipif(sys.version_info < (3, 9), reason="Native parameterized generics require Python 3.9+")
+    def test_get_actual_nullable_native_generic(self) -> None:
+        """Test get_actual strips params from Union[list[str], None]."""
+        expected_type = ExpectedType(Union[list[str], None])  # type: ignore[arg-type]
+        assert expected_type.get_actual() is list
+
 
 class TestValidation:
     """Test Validation class for comprehensive coverage."""
+
+    @pytest.mark.skipif(sys.version_info < (3, 9), reason="Native parameterized generics require Python 3.9+")
+    def test_validate_native_generic_valid_field(self) -> None:
+        """Test validation of a valid field typed with list[str]."""
+        validation = Validation("keywords", ["alpha", "beta"], list[str])
+        assert validation.validate() is None
+
+    @pytest.mark.skipif(sys.version_info < (3, 9), reason="Native parameterized generics require Python 3.9+")
+    def test_validate_native_generic_invalid_field(self) -> None:
+        """Test validation of an invalid field typed with list[str]."""
+        validation = Validation("keywords", "not_a_list", list[str])
+        result = validation.validate()
+        assert isinstance(result, ConfigValidationError)
+        assert "Field 'keywords' expected list, got str" in str(result)
 
     def test_validate_valid_field(self) -> None:
         """Test validation of a valid field."""
