@@ -30,6 +30,23 @@ class ValidatedTestConfig(YamlDataClassConfig):
     active: bool
 
 
+YAML_FOR_TESTING_SINGLE_ERROR = textwrap.dedent("""
+    name: "valid_name"
+    age: "not_an_int"
+    active: false
+""")
+YAML_FOR_TESTING_MULTIPLE_ERRORS = textwrap.dedent("""
+    name: 123
+    age: "not_an_int"
+    active: "not_a_bool"
+""")
+YAML_FOR_TESTING_NO_NULLABLE_TYPES = textwrap.dedent("""
+    name: "test"
+    age: 25
+    active: false
+""")
+
+
 class TestValidateConfig:
     """Tests for validate_config_dataclass decorator."""
 
@@ -57,41 +74,18 @@ class TestValidateConfig:
         assert config.age == expected_age
         assert config.active is True
 
-    @pytest.mark.parametrize(
-        "content",
-        [
-            textwrap.dedent(
-                """
-                name: "hello"
-                age: "not_an_int"
-                active: true
-                """,
-            ),
-        ],
-    )
+    @pytest.mark.parametrize("content", [YAML_FOR_TESTING_SINGLE_ERROR])
     def test_type_validation_single_error(self, temporary_yaml_file: Path) -> None:
         """Test that type validation catches single type errors."""
         config = ValidatedTestConfig.create()
         with pytest.raises(ExceptionGroup) as exc_info:
             config.load(temporary_yaml_file)
-
         # Check that we got the expected validation error
         assert len(exc_info.value.exceptions) == 1
         assert isinstance(exc_info.value.exceptions[0], ConfigValidationError)
         assert "Field 'age' expected int, got str" in str(exc_info.value.exceptions[0])
 
-    @pytest.mark.parametrize(
-        "content",
-        [
-            textwrap.dedent(
-                """
-                name: 123
-                age: "not_an_int"
-                active: "not_a_bool"
-                """,
-            ),
-        ],
-    )
+    @pytest.mark.parametrize("content", [YAML_FOR_TESTING_MULTIPLE_ERRORS])
     def test_type_validation_multiple_errors(self, temporary_yaml_file: Path) -> None:
         """Test that type validation collects multiple errors."""
         config = ValidatedTestConfig.create()
@@ -110,18 +104,7 @@ class TestValidateConfig:
         for expected_error in expected_errors:
             assert any(expected_error in msg for msg in error_messages)
 
-    @pytest.mark.parametrize(
-        "content",
-        [
-            textwrap.dedent(
-                """
-                name: "test"
-                age: 25
-                active: false
-                """,
-            ),
-        ],
-    )
+    @pytest.mark.parametrize("content", [YAML_FOR_TESTING_NO_NULLABLE_TYPES])
     def test_no_nullable_types_required(self, temporary_yaml_file: Path) -> None:
         """Test that properties don't require | None annotations."""
         config = ValidatedTestConfig.create()
