@@ -37,7 +37,8 @@ class TestIsNullableType:
     def test_is_nullable_type_union_type_class_with_none(self) -> None:
         """Test is_nullable_type returns True for UnionType-named class with None."""
 
-        class UnionType:
+        # Reason: For simplicity in testing, we define a class that mimics the structure of a Union type with None.
+        class UnionType:  # pylint: disable=too-few-public-methods
             __args__ = (str, type(None))
 
         result = is_nullable_type(UnionType())
