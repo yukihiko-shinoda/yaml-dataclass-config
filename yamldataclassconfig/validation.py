@@ -67,7 +67,7 @@ class ExpectedType:
         args = getattr(self.expected_type, "__args__", None)
         if args is None or not isinstance(args, (tuple, list)):
             return None
-        return args  # type: ignore[no-any-return]
+        return args
 
     @staticmethod
     # Reason: Ruff's bug

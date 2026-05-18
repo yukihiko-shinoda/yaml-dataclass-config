@@ -28,6 +28,20 @@ class TestIsNullableType:
         result = is_nullable_type(str)
         assert result is False
 
+    def test_is_nullable_type_pipe_union_with_none(self) -> None:
+        """Test is_nullable_type returns True for pipe union syntax with None."""
+        result = is_nullable_type(str | None)
+        assert result is True
+
+    def test_is_nullable_type_union_type_class_with_none(self) -> None:
+        """Test is_nullable_type returns True for UnionType-named class with None."""
+
+        class UnionType:
+            __args__ = (str, type(None))
+
+        result = is_nullable_type(UnionType())
+        assert result is True
+
     @pytest.mark.skipif(sys.version_info < (3, 10), reason="Requires Python 3.10+")
     def test_is_nullable_type_modern_union_with_none(self) -> None:
         """Test is_nullable_type returns True for modern union syntax with None."""

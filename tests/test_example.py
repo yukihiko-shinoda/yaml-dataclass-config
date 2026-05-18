@@ -18,13 +18,7 @@ class TestYamlDataClassConfig:
         """Values on YAML file should be printed."""
         my_project.main()
         captured = capsys.readouterr()
-        assert (
-            captured.out
-            == """1
-2
-2019-06-25 13:33:30
-"""
-        )
+        assert captured.out == "1\n2\n2019-06-25 13:33:30\n"
 
 
 class TestConfigHandlerPytest:

@@ -6,11 +6,16 @@ on:
   pull_request:
     branches:
       - main
+permissions:
+  contents: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
+  packages: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
 jobs:
   call-workflow-test:
     uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-test.yml@main
     with:
-      support-python-versions: "[ '3.13', '3.12', '3.11', '3.10', '3.9', '3.8' ]"
+      support-python-versions: "[ '3.14', '3.13', '3.12', '3.11', '3.10', '3.9', '3.8' ]"
       is-supporting-python-3-7-in-linux: true
   call-workflow-lint:
     uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-lint.yml@main
+    with:
+      enable-xenon: false

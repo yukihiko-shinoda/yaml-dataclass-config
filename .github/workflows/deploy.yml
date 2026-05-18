@@ -2,6 +2,9 @@ on:
   push:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
+permissions:
+  contents: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
+  packages: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
 jobs:
   call-workflow:
     uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-deploy.yml@main
