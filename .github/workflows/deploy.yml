@@ -3,10 +3,9 @@ on:
     tags:
       - 'v[0-9]+.[0-9]+.[0-9]+'
 permissions:
-  contents: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
-  packages: read  # Advanced Security suggested for Principle of Least Privilege in pull request review
+  contents: read
 jobs:
   call-workflow:
-    uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-deploy.yml@main
+    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-deploy/.github/workflows/workflow.yml@eab497a87ebe0cc07a02f723660b750be925f4aa  # v1.0.0
     secrets:
       pypi_password: ${{ secrets.PYPI_PASSWORD }}

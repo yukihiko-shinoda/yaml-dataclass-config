@@ -19,14 +19,17 @@ on:
   schedule:
     - cron: '21 17 * * 3'
 
+permissions:
+  security-events: write
+  packages: read
+  actions: read
+  contents: read
+
 jobs:
   call-workflow:
+    uses: yukihiko-shinoda/reusable-workflow-codeql-python/.github/workflows/workflow.yml@ca5a2fbce666756cb15aca6e3a33852588728909  # v1.0.0
     permissions:
-      # required for all workflows
       security-events: write
-      # required to fetch internal or private CodeQL packs
       packages: read
-      # only required for workflows in private repositories
       actions: read
       contents: read
-    uses: yukihiko-shinoda/invoke-lint/.github/workflows/reusable-codeql-analysis.yml@main
