@@ -5,6 +5,7 @@ build-backend = "setuptools.build_meta"
 [dependency-groups]
 dev = [
     "bandit",
+    "build",
     "bump-my-version",
     "cohesion",
     # The coverage==3.5.3 is difficult to analyze its dependencies by dependencies management tool,
