@@ -11,7 +11,7 @@ __all__ = ["build_path", "create_file_path_field"]
 
 # Reason: Ruff's bug
 def create_file_path_field(path: Union[Path, str], *, path_is_absolute: bool = False) -> str:  # noqa: UP007
-    """This function build and return FILE_PATH on YamlDataClassConfig class.
+    """Build and return FILE_PATH on YamlDataClassConfig class.
 
     :param path: path to YAML config file
     :param path_is_absolute: if True, use path as absolute
@@ -25,7 +25,7 @@ def create_file_path_field(path: Union[Path, str], *, path_is_absolute: bool = F
 
 # Reason: Ruff's bug
 def build_path(path: Union[Path, str], *, path_is_absolute: bool = False) -> str:  # noqa: UP007
-    """This function build Path instance from arguments and returns it.
+    """Build Path instance from arguments and return it.
 
     :param path: path
     :param path_is_absolute: if True, use path as absolute
