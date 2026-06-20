@@ -57,7 +57,7 @@ class KeyArguments(Generic[T]):
         self.kwargs = kwargs
 
     def build_init_kwargs(self) -> None:
-        """Builds initialization keyword arguments for the dataclass."""
+        """Build initialization keyword arguments for the dataclass."""
         # Check if this is a dataclass
         if not dataclasses.is_dataclass(self.cls):
             return
@@ -69,7 +69,7 @@ class KeyArguments(Generic[T]):
             self.init_kwargs[field_name] = self.get_kwarg(field_name, field_obj)
 
     def get_kwarg(self, field_name: str, field_obj: dataclasses.Field[Any]) -> Any:  # noqa: ANN401
-        """Gets the keyword argument value for a field."""
+        """Get the keyword argument value for a field."""
         if field_name in self.kwargs:
             return self.kwargs[field_name]
         if field_obj.default is not dataclasses.MISSING:

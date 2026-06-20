@@ -88,7 +88,7 @@ class YamlDataClassConfig(DataClassJsonMixin, metaclass=ABCMeta):
 
     # Reason: Ruff's bug
     def load(self, path: Optional[Union[Path, str]] = None, *, path_is_absolute: bool = False) -> None:  # noqa: UP007,UP045
-        """This method loads from YAML file to properties of self instance with validation.
+        """Load from YAML file to properties of self instance with validation.
 
         Why doesn't load when __init__ is to make the following requirements compatible:
         1. Access config as global

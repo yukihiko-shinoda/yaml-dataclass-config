@@ -14,18 +14,23 @@
   },
   "permissions": {
     "allow": [
-      "Bash(uv run invoke lint:*)",
-      "Bash(uv run pytest:*)",
-      "Bash(uv run invoke test:*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "Bash(git rm*)",
+      "Bash(git push*)",
+      "Bash(git status*)",
+      "Bash(uv run invoke lint*)",
+      "Bash(uv run pytest*)",
+      "Bash(uv run invoke test*)",
       "Edit(myproduct/**)",
       "Edit(yamldataclassconfig/**)",
       "Edit(yourproduct/**)",
       "Edit(tests/**)"
     ],
     "deny": [
-      "Bash(git commit:*)",
-      "Bash(git push:*)",
-      "Bash(rm:*)"
+      "Bash(git push -f*)",
+      "Bash(git push --force*)",
+      "Bash(rm*)"
     ]
   }
 }

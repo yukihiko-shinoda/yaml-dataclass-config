@@ -35,7 +35,7 @@ articles, and such.
 
 ### Submit Feedback
 
-The best way to send feedback is to file an issue at  [GitHub Issues].
+The best way to send feedback is to file an issue at [GitHub Issues].
 
 If you are proposing a feature:
 
@@ -46,7 +46,7 @@ If you are proposing a feature:
 
 <!-- markdownlint-disable no-trailing-punctuation -->
 ## Get Started!
-<!-- markdownlint-enaable no-trailing-punctuation -->
+<!-- markdownlint-enable no-trailing-punctuation -->
 
 Ready to contribute? Here's how to set up `YAML Data Class Config` for local development.
 
@@ -57,10 +57,16 @@ Ready to contribute? Here's how to set up `YAML Data Class Config` for local dev
    git clone git@github.com:your_name_here/yaml-dataclass-config.git
    ```
 
-3. Install your local copy into a virtualenv. Assuming you have Pipenv installed, this is how you set up your fork for local development:
+3. Set up your development environment.
+
+   The recommended way is to use [docker-compose-python-development](https://github.com/yukihiko-shinoda/docker-compose-python-development),
+   which provides a pre-configured Docker-based environment for Python projects.
+   Follow the setup instructions in that repository, then clone this repo into its workspace.
+
+   Alternatively, install dependencies directly with `uv`:
 
    ```console
-   pipenv install --dev
+   uv sync
    ```
 
 4. Create a branch for local development:
@@ -71,15 +77,13 @@ Ready to contribute? Here's how to set up `YAML Data Class Config` for local dev
 
    Now you can make your changes locally.
 
-5. When you're done making changes,
-   check that your changes pass isort, flake8, black,
-   and the tests, including testing oldest Python version:
+5. When you're done making changes, check that your changes pass linting and the tests:
 
    ```console
-   pipenv run inv style --check
-   pipenv run pytest
-   pipenv install --python 3.7
-   pipenv run pytest
+   uv run inv style --check
+   uv run inv lint
+   uv run inv lint.deep
+   uv run inv test.all
    ```
 
 6. Commit your changes and push your branch to GitHub:
@@ -106,7 +110,7 @@ Before you submit a pull request, check that it meets these guidelines:
 To run a subset of tests:
 
 ```console
-pipenv run pytest tests.test_yaml-dataclass-config
+uv run pytest tests/test_something.py
 ```
 
 ## Deploying
@@ -121,6 +125,6 @@ git push
 git push --tags
 ```
 
-Travis will then deploy to PyPI if tests pass.
+GitHub Actions will then deploy to PyPI if tests pass.
 
 [GitHub Issues]: https://github.com/yukihiko-shinoda/yaml-dataclass-config/issues
