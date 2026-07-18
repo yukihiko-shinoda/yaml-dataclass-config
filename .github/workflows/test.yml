@@ -10,7 +10,7 @@ permissions:
   contents: read
 jobs:
   call-workflow-test:
-    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-test/.github/workflows/workflow.yml@3deca6708b4c2b623c7eac175a63973c05c64e3b  # v1.0.0
+    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-test/.github/workflows/workflow.yml@33e2c7ac8a46f8e37113fb4ccb1be5497e5fd48a  # v1.1.0
     with:
       support-python-versions: "[ '3.14', '3.13', '3.12', '3.11', '3.10', '3.9', '3.8' ]"
       is-supporting-python-3-7-in-linux: true
