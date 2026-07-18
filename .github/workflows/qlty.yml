@@ -10,7 +10,7 @@ permissions:
   id-token: write
 jobs:
   call-workflow:
-    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-qlty/.github/workflows/workflow.yml@732676e4d8cea832b97f2f66ee73fd65fa837e7d  # v1.0.0
+    uses: yukihiko-shinoda/reusable-workflow-invoke-lint-qlty/.github/workflows/workflow.yml@d559042ef2b0dc7bb96be1e03a1c4abd1d100a69  # v1.1.0
     permissions:
       contents: read
       id-token: write
