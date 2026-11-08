@@ -1,7 +1,7 @@
 # YAML Data Class Config
 
 [![Test](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/Test/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ATest)
-[![CodeQL](https://github.com/yukihiko-shinoda/yaml-dataclass-config/workflows/CodeQL/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions?query=workflow%3ACodeQL)
+[![CodeQL](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/actions/workflows/github-code-scanning/codeql)
 [![Code Coverage](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/coverage.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
 [![Maintainability](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config/maintainability.svg)](https://qlty.sh/gh/yukihiko-shinoda/projects/yaml-dataclass-config)
 [![Dependabot](https://flat.badgen.net/github/dependabot/yukihiko-shinoda/yaml-dataclass-config?icon=dependabot)](https://github.com/yukihiko-shinoda/yaml-dataclass-config/security/dependabot)
