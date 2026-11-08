@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2020 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Tasks for maintaining the project.
 
 Execute 'invoke --list' for guidance on using Invoke

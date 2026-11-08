@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2019 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """This module implements abstract config class."""
 
 from __future__ import annotations
