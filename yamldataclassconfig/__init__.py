@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2019 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """This module implements helpers to import config file writen by YAML to Python Data Classes."""
 
 from __future__ import annotations

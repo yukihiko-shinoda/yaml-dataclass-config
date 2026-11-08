@@ -1,3 +1,5 @@
+# SPDX-FileCopyrightText: Copyright (c) 2025 Yukihiko Shinoda
+# SPDX-License-Identifier: MIT
 """Comprehensive tests for validation.py to achieve 100% coverage."""
 
 from __future__ import annotations
